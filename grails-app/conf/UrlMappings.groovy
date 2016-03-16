@@ -7,6 +7,9 @@ class UrlMappings {
             }
         }
 
+        "/api/users" (controller: "user", action: "list", method: "GET")
+        "/api/users" (controller: "user", action: "save", method: "POST")
+
         "/"(view:"/index")
         "500"(view:'/error')
 	}
