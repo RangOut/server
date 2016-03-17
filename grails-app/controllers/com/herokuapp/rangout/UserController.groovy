@@ -4,8 +4,6 @@ import grails.transaction.*
 import grails.converters.JSON
 import grails.rest.RestfulController
 
-import org.springframework.dao.DataIntegrityViolationException
-
 @Transactional(readOnly = true)
 class UserController extends RestfulController<User> {
 
@@ -26,17 +24,16 @@ class UserController extends RestfulController<User> {
     def save() {
         // Null-safe access: if params.oAuth is a null value its will be null instead of NullPointerException
         String oAuth = params?.oAuth
-        def u = new User(oAuth: oAuth)
+        def usr = new User(oAuth: oAuth)
 
-        try {
-            u.save(flush: true)
+        if(usr.validate()) {
+            usr.save()
 
-            render u as JSON
-            response.setStatus(201)
-            response.setCharacterEncoding("UTF-8")
-            response.setContentType("application/json")
-        } catch(DataIntegrityViolationException e) {
-
+            response.status = 201
+            render usr as JSON
+        } else {
+            response.status = 400
+            render([status: "error", "message": "Property oAuth must be unique and cannot be null"] as JSON)
         }
     }
 }

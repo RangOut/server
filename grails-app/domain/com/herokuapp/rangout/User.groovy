@@ -10,4 +10,10 @@ class User {
     static constraints = {
         oAuth unique: true, nullable: false
     }
+
+    static mapping = {
+        table 'usr'
+        version false
+        oAuth column: 'auth_agent'
+    }
 }
