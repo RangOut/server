@@ -121,6 +121,6 @@ log4j.main = {
 grails.app.context = "/"
 
 grails.plugin.facebooksdk.app.id = 1533498036951268
-grails.plugin.facebooksdk.app.permissions = {APP_PERMISSIONS} // Ex. ['email','user_photos']
+grails.plugin.facebooksdk.app.permissions = ['public_profile', 'email'] // Ex. ['email','public_profile']
 grails.plugin.facebooksdk.app.secret = "ee1a0aea70f9ccd5301c38ce20f93b86"
 grails.plugin.facebooksdk.apiVersion = 'v2.3'

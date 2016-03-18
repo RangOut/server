@@ -65,6 +65,7 @@ grails.project.dependency.resolution = {
         compile ':heroku:1.0.1'
         compile ':cloud-support:1.0.11'
         compile ":marshallers:0.6"
+        compile ":facebook-sdk:0.5.0"
 
         // plugins needed at runtime but not for compilation
         runtime ":hibernate4:4.3.8.1" // or ":hibernate:3.6.10.18"
