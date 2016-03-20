@@ -3,7 +3,7 @@ package com.herokuapp.rangout
 import grails.rest.*
 import java.security.MessageDigest
 
-@Resource(uri='api/employees', readOnly=false, formats=['json'])
+@Resource(uri='/employees', readOnly=false, formats=['json'])
 class Employee {
 
     String name
@@ -28,10 +28,9 @@ class Employee {
         password matches: "^(?=.*\\d).{6,}\$", nullable: false
         username nullable: false,
                 matches: "(?=^.{3,}\$)^[a-zA-Z][a-zA-Z0-9]*[._-]?[a-zA-Z0-9]+\$",
-                validator: {value, object, errors ->
+                validator: {value, object ->
                     for(Employee e : object.establishment.employee) {
                         if(e.username == value) {
-                            errors.rejectValue('username', 'duplicateValue')
                             return false
                         }
                     }

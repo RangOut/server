@@ -15,28 +15,44 @@ class EmployeeController extends RestfulController<Employee> {
     }
 
     def list() {
+        String establishment_id = params?.establishment_id
+        def establishment = Establishment.findById(Long.parseLong(establishment_id))
+
+        def employees = Employee.findAllByEstablishment(establishment)
+        JSON.use("employeeList") {
+            render(contentType: 'application/json') {[
+                employees:  employees,
+                status:     employees.isEmpty() ? "Nothing present" : "OK"
+            ]}
+        }
     }
 
     def save() {
         String name = params?.name
         String username = params?.username
         String password = params?.password
-        String organization = params?.establishment
+        String establishment_id = params?.establishment_id
 
-        Establishment establishment = organization.matches("^\\d+\$") ?
-                Establishment.findById(Long.parseLong(organization)) :
-                Establishment.findByName(organization)
+        Establishment establishment = Establishment.findById(Long.parseLong(establishment_id))
         def employee =
                 new Employee(name: name, username: username, password: password, establishment: establishment)
 
+        String message;
         if(employee.validate()) {
             employee.save()
-
             response.status = 201
-            render employee as JSON
+            message = "Employee " + employee.name +
+                    " registered with success in the establishment " + establishment.name
         } else {
             response.status = 400
-            render([status: "error"] as JSON)
+            message = "Employee not registered, please check the constraints to register a employee"
+        }
+        JSON.use("employeeSave") {
+            render(contentType: 'application/json') {[
+                employee:   employee.hasErrors() ? []      : employee,
+                status:     employee.hasErrors() ? "error" : "OK",
+                message:    message
+            ]}
         }
     }
 }
