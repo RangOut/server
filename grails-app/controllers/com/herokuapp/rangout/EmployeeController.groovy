@@ -8,7 +8,9 @@ import grails.converters.JSON
 @Transactional(readOnly = true)
 class EmployeeController extends RestfulController<Employee> {
 
-    static allowedMethods = [save: "POST", list: "GET"]
+    static allowedMethods = [
+            save: "POST", list: "GET", delete: "DELETE", update: "PUT", show: "GET"
+    ]
 
     EmployeeController() {
         super(Employee)
@@ -25,6 +27,10 @@ class EmployeeController extends RestfulController<Employee> {
                 status:     employees.isEmpty() ? "Nothing present" : "OK"
             ]}
         }
+    }
+
+    def show() {
+
     }
 
     def save() {
@@ -45,7 +51,7 @@ class EmployeeController extends RestfulController<Employee> {
                     " registered with success in the establishment " + establishment.name
         } else {
             response.status = 400
-            message = "Employee not registered, please check the constraints to register a employee"
+            message = "Employee not registered, please check the constraints to register a employees"
         }
         JSON.use("employeeSave") {
             render(contentType: 'application/json') {[
@@ -54,5 +60,13 @@ class EmployeeController extends RestfulController<Employee> {
                 message:    message
             ]}
         }
+    }
+
+    def update() {
+
+    }
+
+    def delete() {
+
     }
 }

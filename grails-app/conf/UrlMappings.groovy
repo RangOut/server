@@ -9,14 +9,14 @@ class UrlMappings {
             }
         }
 
-//        "/api/users" (controller: "user", action: "list", method: "GET")
-//        "/api/users" (controller: "user", action: "save", method: "POST")
-
         "/api/establishments" (controller: "establishment", action: "list", method: "GET")
         "/api/establishments" (controller: "establishment", action: "save", method: "POST")
 
         "/api/establishments/$establishment_id/employees" (controller: "employee", action: "list", method: "GET")
         "/api/establishments/$establishment_id/employees" (controller: "employee", action: "save", method: "POST")
+        "/api/establishments/$establishment_id/employees/$employees_id" (controller: "employee", action: "show", method: "GET")
+        "/api/establishments/$establishment_id/employees/$employees_id" (controller: "employee", action: "update", method: "PUT")
+        "/api/establishments/$establishment_id/employees/$employees_id" (controller: "employee", action: "delete", method: "DELETE")
 
         "/"(view:"/index")
         "500"(view:'/error')

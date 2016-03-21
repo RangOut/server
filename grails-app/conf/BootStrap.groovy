@@ -21,7 +21,7 @@ class BootStrap {
                 result['id'] = employee.id
                 result['name'] = employee.name
                 result['username'] = employee.username
-                // Get information about employee's establishment
+                // Get information about employees's establishment
                 final establishment = [id: employee.establishment.id, name: employee.establishment.name]
                 result['establishment'] = establishment
                 result

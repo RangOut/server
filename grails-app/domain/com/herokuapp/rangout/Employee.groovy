@@ -7,20 +7,21 @@ import java.security.MessageDigest
 class Employee {
 
     String name
-    /*
+    /* Constraints:
+     *
      * Only one special char (._-) allowed and it must not be at the extrema of the string
      * The first character cannot be a number
      * All the other characters allowed are letters and numbers
      * The total length should be more than 3 chars
-     *
      **/
     String username
-    // Password must be more than 6 chars and include at least one numeric digit.
+    /* Constraints:
+     *
+     * Password must be more than 6 chars and include at least one numeric digit.
+     **/
     String password
-    Establishment establishment
 
-    static belongsTo = Establishment
-    static hasOne = [establishment: Establishment]
+    static belongsTo = [establishment: Establishment]
 
     static constraints = {
         name nullable: false
@@ -29,7 +30,7 @@ class Employee {
         username nullable: false,
                 matches: "(?=^.{3,}\$)^[a-zA-Z][a-zA-Z0-9]*[._-]?[a-zA-Z0-9]+\$",
                 validator: {value, object ->
-                    for(Employee e : object.establishment.employee) {
+                    for(Employee e : object.establishment.employees) {
                         if(e.username == value) {
                             return false
                         }
@@ -38,7 +39,7 @@ class Employee {
     }
 
     static mapping = {
-        table 'employee'
+        table 'employees'
         version false
         username column: 'user_name'
         password column: 'hash_password'
