@@ -27,13 +27,10 @@ class Employee {
         name nullable: false
         establishment nullable: false
         password matches: "^(?=.*\\d).{6,}\$", nullable: false
-        username nullable: false,
-                matches: "(?=^.{3,}\$)^[a-zA-Z][a-zA-Z0-9]*[._-]?[a-zA-Z0-9]+\$",
+        username nullable: false, matches: "(?=^.{3,}\$)^[a-zA-Z][a-zA-Z0-9]*[._-]?[a-zA-Z0-9]+\$",
                 validator: {value, object ->
                     for(Employee e : object.establishment.employees) {
-                        if(e.username == value) {
-                            return false
-                        }
+                        if(e.username == value) return false
                     }
                 }
     }
@@ -41,9 +38,9 @@ class Employee {
     static mapping = {
         table 'employees'
         version false
-        username column: 'user_name'
-        password column: 'hash_password'
-        establishment column: 'establishment_id'
+        username column: 'username'
+        password column: 'password'
+        establishment column: 'est_id'
     }
 
     def beforeInsert() {

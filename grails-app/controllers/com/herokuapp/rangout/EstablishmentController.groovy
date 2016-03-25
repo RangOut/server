@@ -18,10 +18,26 @@ class EstablishmentController extends RestfulController<Establishment> {
 
     def save() {
         String name = params?.name
+        String cmpj = params?.cmpj
 
-        def establishment = new Establishment(name: name)
-        establishment.save()
+        // Establishment Address attributes
+        String cep = params?.cep
+        String street = params?.street
+        String number = params?.number
+        String neighborhood = params?.neighborhood
+        String city = params?.city
+        String state = params?.state
+        String country = params?.country
+        String complement = params?.complement
 
+        // Establishment Contact attributes
+        Set<String> telephones = new HashSet<>(params?.list('telephone'))
+        Set<String> cellphones = new HashSet<>(params?.list('cellphone'))
+
+        def establishment = new Establishment(name: name, cmpj: cmpj, address: new Address(cep: cep, street: street, number: number, neighborhood: neighborhood,
+                city: city, state: state, country: country, complement: complement), telephones: telephones, cellphones: cellphones)
+
+        establishment.save(flush: true)
         response.status = 201
         render establishment as JSON
     }

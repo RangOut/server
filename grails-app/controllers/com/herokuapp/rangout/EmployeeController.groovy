@@ -17,8 +17,8 @@ class EmployeeController extends RestfulController<Employee> {
     }
 
     def list() {
-        String establishment_id = params?.establishment_id
-        def establishment = Establishment.findById(Long.parseLong(establishment_id))
+        long establishment_id = params?.long("establishment_id")
+        def establishment = Establishment.findById(establishment_id)
 
         def employees = Employee.findAllByEstablishment(establishment)
         JSON.use("employeeList") {
