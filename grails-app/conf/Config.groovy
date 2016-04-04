@@ -59,7 +59,6 @@ grails {
     }
 }
 
-
 grails.converters.encoding = "UTF-8"
 // scaffolding templates configuration
 grails.scaffolding.templates.domainSuffix = 'Instance'
@@ -91,7 +90,7 @@ environments {
     }
     production {
         grails.logging.jul.usebridge = false
-        // TODO: grails.serverURL = "http://www.changeme.com"
+        grails.serverURL = "https://rangout.herokuapp.com/"
     }
 }
 
@@ -102,7 +101,6 @@ log4j.main = {
     //appenders {
     //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
     //}
-
     error  'org.codehaus.groovy.grails.web.servlet',        // controllers
            'org.codehaus.groovy.grails.web.pages',          // GSP
            'org.codehaus.groovy.grails.web.sitemesh',       // layouts
@@ -114,13 +112,143 @@ log4j.main = {
            'org.springframework',
            'org.hibernate',
            'net.sf.ehcache.hibernate'
+    info   'org.springframework.security'
+    debug  'grails.app.controllers',
+           'grails.app.conf',
+           'grails.app.domain',
+           'grails.app.services'
+    error  'grails.plugin.heroku',
+           'grails.plugin.cloudsupport'
 }
+
+// Heroku plugin installs database session unless excluded in BuildConfig
+grails.plugin.databasesession.enabled = false
+
+// Disable Sitemesh, no views in an API app
+// Also set in sitemesh.xml
+// see: https://jira.grails.org/browse/GRAILS-5770
+grails.views.gsp.sitemesh.preprocess = false
 
 // Change a context project
 // For example: change http://localhost:8080/Rangout to http://localhost:8080/
 grails.app.context = "/"
 
-grails.plugin.facebooksdk.app.id = 1533498036951268
-grails.plugin.facebooksdk.app.permissions = ['public_profile', 'email'] // Ex. ['email','public_profile']
-grails.plugin.facebooksdk.app.secret = "ee1a0aea70f9ccd5301c38ce20f93b86"
-grails.plugin.facebooksdk.apiVersion = 'v2.3'
+// Added by the Spring Security Core plugin:
+grails.plugin.springsecurity.userLookup.userDomainClassName = 'com.herokuapp.rangout.Employee'
+grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'com.herokuapp.rangout.EmployeeRole'
+grails.plugin.springsecurity.authority.className = 'com.herokuapp.rangout.Role'
+grails.plugin.springsecurity.securityConfigType = 'InterceptUrlMap'
+grails.plugin.springsecurity.controllerAnnotations.staticRules = [
+        '/':                              ['permitAll'],
+        '/index':                         ['permitAll'],
+        '/index.gsp':                     ['permitAll'],
+        '/**/js/**':                      ['permitAll'],
+        '/**/css/**':                     ['permitAll'],
+        '/**/images/**':                  ['permitAll'],
+        '/**/fonts/**':                   ['permitAll'],
+        '/**/favicon.ico':                ['permitAll']]
+grails.plugin.springsecurity.interceptUrlMap = [
+        '/':                              ['permitAll'],
+        '/**/js/**':                      ['permitAll'],
+        '/**/css/**':                     ['permitAll'],
+        '/**/images/**':                  ['permitAll'],
+        '/**/fonts/**':                   ['permitAll'],
+        '/**/favicon.ico':                ['permitAll'],
+        '/api/register':                  ['permitAll'],
+        '/api/login':                     ['permitAll'],
+        '/api/validate':                  ['permitAll'],
+        '/api/status':                    ['permitAll'],
+        '/dbconsole*/**':                 ['permitAll'],
+        '/api/**':				          ['isFullyAuthenticated()']]
+
+// Pessimistic lock-down: reject all urls with no security definition
+// Lock everything down by default, return 403
+grails.plugin.springsecurity.rejectIfNoRule=true
+grails.plugin.springsecurity.fii.rejectPublicInvocations=false
+//grails.plugin.springsecurity.securityConfigType="Annotation"
+
+//login
+grails.plugin.springsecurity.rest.login.active=true
+grails.plugin.springsecurity.rest.login.endpointUrl='/api/login'
+grails.plugin.springsecurity.rest.login.failureStatusCode=401
+
+//TODO: enable me, it's more RESTFUL
+grails.plugin.springsecurity.rest.login.useJsonCredentials=true
+grails.plugin.springsecurity.rest.login.usernamePropertyName='username'
+grails.plugin.springsecurity.rest.login.passwordPropertyName='password'
+
+grails.plugin.springsecurity.rest.login.useRequestParamsCredentials=false
+grails.plugin.springsecurity.rest.login.usernamePropertyName='username'
+grails.plugin.springsecurity.rest.login.passwordPropertyName='password'
+
+//logout
+grails.plugin.springsecurity.rest.logout.endpointUrl='/api/logout'
+grails.plugin.springsecurity.rest.token.validation.headerName='X-Auth-Token'
+
+//token generation
+grails.plugin.springsecurity.rest.token.generation.useSecureRandom=true
+grails.plugin.springsecurity.rest.token.generation.useUUID=false
+
+//use GROM
+grails.plugin.springsecurity.rest.token.storage.useGorm=false
+grails.plugin.springsecurity.rest.token.storage.gorm.tokenDomainClassName='com.herokuapp.rangout.AuthenticationToken'
+grails.plugin.springsecurity.rest.token.storage.gorm.tokenValuePropertyName='token'
+grails.plugin.springsecurity.rest.token.storage.gorm.usernamePropertyName='username'
+
+grails.plugin.springsecurity.rest.token.storage.useGrailsCache=false
+grails.plugin.springsecurity.rest.token.storage.grailsCacheName=null
+
+//token rendering
+grails.plugin.springsecurity.rest.token.rendering.usernamePropertyName='username'
+grails.plugin.springsecurity.rest.token.rendering.authoritiesPropertyName='roles'
+grails.plugin.springsecurity.rest.token.rendering.tokenPropertyName='token'
+
+//token validate
+grails.plugin.springsecurity.rest.token.validation.useBearerToken=false
+grails.plugin.springsecurity.rest.token.validation.headerName='X-Auth-Token'
+grails.plugin.springsecurity.rest.token.validation.active=true
+grails.plugin.springsecurity.rest.token.validation.endpointUrl='/api/validate'
+
+cors.enabled=true
+cors.url.pattern = '/api/*'
+cors.headers=[
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+        'Access-Control-Allow-Headers': 'origin, authorization, accept, content-type, x-requested-with,X-Auth-Token',
+        'Access-Control-Allow-Methods': 'GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS',
+        'Access-Control-Max-Age': 3600
+]
+
+// Grails Spring Security REST Plugin Configuration
+// http://alvarosanchez.github.io/grails-spring-security-rest/docs/guide/single.html#grailsCache
+grails.plugin.springsecurity.filterChain.chainMap = [
+        '/api/**': 'JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-rememberMeAuthenticationFilter',  // Stateless chain
+        '/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restExceptionTranslationFilter'                                                                          // Traditional chain
+]
+
+// Example: http://alvarosanchez.github.io/grails-spring-security-rest/docs/guide/single.html#
+//grails {
+//    plugin {
+//        springsecurity {
+//            filterChain {
+//                chainMap = [
+//                        '/api/guest/**': 'anonymousAuthenticationFilter,restTokenValidationFilter,restExceptionTranslationFilter,filterInvocationInterceptor',
+//                        '/api/**'      : 'JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-rememberMeAuthenticationFilter',
+//                        '/**'          : 'JOINED_FILTERS,-restTokenValidationFilter,-restExceptionTranslationFilter'
+//                ]
+//            }
+//            rest {
+//                token {
+//                    validation {
+//                        enableAnonymousAccess = true
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
+
+//grails.plugin.facebooksdk.app.id = 1533498036951268
+//grails.plugin.facebooksdk.app.permissions = ['public_profile', 'email'] // Ex. ['email','public_profile']
+//grails.plugin.facebooksdk.app.secret = "ee1a0aea70f9ccd5301c38ce20f93b86"
+//grails.plugin.facebooksdk.apiVersion = 'v2.3'

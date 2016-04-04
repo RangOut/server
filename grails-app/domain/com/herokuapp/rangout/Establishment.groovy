@@ -1,22 +1,45 @@
 package com.herokuapp.rangout
 
 import grails.rest.*
+import grails.validation.Validateable
+import groovy.transform.EqualsAndHashCode
 
+@Validateable
 @Resource(uri='api/establishments', readOnly=false, formats=['json'])
 class Establishment {
 
     String name
-    String cmpj
+    String cnpj
+    String nickname
 
     Address address
+    Manager manager
 
-    static hasMany  = [employees: Employee, managers: Employee, telephones: String, cellphones: String]
+    static hasMany  = [employees: Employee, telephones: String, cellphones: String]
     static embedded = ['address']
 
     static constraints = {
         name nullable: false
-        cmpj unique: true, nullable: false, matches: "^(\\d{2}.?\\d{3}.?\\d{3}\\/?\\d{4}-?\\d{2})\$"
-        address nullable: false
+        nickname unique: true, nullable: false
+        cnpj unique: true, nullable: true, matches: "^(\\d{2}.?\\d{3}.?\\d{3}\\/?\\d{4}-?\\d{2})\$"
+        address nullable: false, validator: { value, object, errors ->
+            if(value.cep != null && !(value.cep ==~ "^[0-9]{5}([-/]?[0-9]{3,4})?\$"))
+                errors.rejectValue('address.cep', 'matches.invalid')
+            if(!(value.number ==~ "(^N/A\$)|^[1-9]\\d*([- s]?[A-Z])*\$"))
+                errors.rejectValue('address.number', 'matches.invalid')
+            if(value.street == null || value.number == null || value.neighborhood == null)
+                errors.rejectValue('address', 'null.attribute.address')
+            if(value.city == null || value.state == null || value.country == null)
+                errors.rejectValue('address', 'null.attribute.address')
+
+            for(Establishment establishment : object.list()) {
+                if(value.id != establishment.address.id && value == establishment.address) {
+                    errors.rejectValue('address', 'unique')
+
+                }
+            }
+        }
+        manager nullable: true
         telephones nullable: false, validator: {value -> return !value.isEmpty()}
         cellphones nullable: true
     }
@@ -25,7 +48,9 @@ class Establishment {
         table 'establishment'
         version false
         name column: 'name'
-        cmpj column: "cmpj"
+        nickname column: 'nickname'
+        cnpj column: "cnpj"
+        manager column: 'manager_id'
         telephones joinTable: [
                 name: 'tel_establishment',
                 column: 'telephone',
@@ -39,6 +64,7 @@ class Establishment {
     }
 }
 
+@EqualsAndHashCode(excludes = ['id', 'cep', 'complement'])
 class Address {
 
     String cep
@@ -51,9 +77,9 @@ class Address {
     String complement
 
     static constraints = {
-        cep nullable: true
+        cep nullable: true, matches: "^[0-9]{5}([-/]?[0-9]{3,4})?\$"
         street nullable: false
-        number nullable: false
+        number nullable: false, matches: "^N\\/A\$|^\\d+([-\\s]?[A-Z])*\$"
         neighborhood nullable: false
         city nullable: false
         state nullable: false

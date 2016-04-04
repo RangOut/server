@@ -9,6 +9,10 @@ class UrlMappings {
             }
         }
 
+        "/api/register" (controller: "application", action: "signup", method: "POST", parseRequest: true)
+
+        "/api/status" (controller: "status", action: "index")
+
         "/api/establishments" (controller: "establishment", action: "list", method: "GET")
         "/api/establishments" (controller: "establishment", action: "save", method: "POST")
 

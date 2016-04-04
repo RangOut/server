@@ -7,35 +7,24 @@ import java.security.MessageDigest
 class Employee {
 
     String name
-    /* Constraints:
-     *
-     * Only one special char (._-) allowed and it must not be at the extrema of the string
-     * The first character cannot be a number
-     * All the other characters allowed are letters and numbers
-     * The total length should be more than 3 chars
-     **/
     String username
-    /* Constraints:
-     *
-     * Password must be more than 6 chars and include at least one numeric digit.
-     **/
     String password
 
+    transient securityService
+    transient springSecurityService
+
     static belongsTo = [establishment: Establishment]
+    static transients = ['securityService', 'springSecurityService']
 
     static constraints = {
         name nullable: false
         establishment nullable: false
-        password matches: "^(?=.*\\d).{6,}\$", nullable: false
-        username nullable: false, matches: "(?=^.{3,}\$)^[a-zA-Z][a-zA-Z0-9]*[._-]?[a-zA-Z0-9]+\$",
-                validator: {value, object ->
-                    for(Employee e : object.establishment.employees) {
-                        if(e.username == value) return false
-                    }
-                }
+        password nullable: false, matches: "^(?=.*\\d).{6,}\$"
+        username nullable: false, matches: "(?=^.{3,}\$)^[a-zA-Z][a-zA-Z0-9]*[._-]?[a-zA-Z0-9]+\$"
     }
 
     static mapping = {
+        tablePerHierarchy false
         table 'employees'
         version false
         username column: 'username'
@@ -43,20 +32,19 @@ class Employee {
         establishment column: 'est_id'
     }
 
-    def beforeInsert() {
-        password = generateSecurityPassword()
+    Set<Role> getAuthorities() {
+        EmployeeRole.findAllByEmployee(this).collect { it.role }
     }
 
-    private def generateSecurityPassword() {
-        MessageDigest message = MessageDigest.getInstance("MD5")
-        message.update(password?.getBytes())
+    def beforeInsert() {
+        encodePassword()
+    }
 
-        byte[] digest = message.digest()
-        StringBuffer buffer = new StringBuffer()
+    def beforeUpdate() {
+        if(isDirty('password')) encodePassword()
+    }
 
-        for(byte bit : digest)
-            buffer.append(String.format("%02x", bit & 0xff))
-
-        return buffer.toString()
+    protected void encodePassword() {
+        password = springSecurityService?.passwordEncoder ? springSecurityService.encodePassword(password) : password
     }
 }

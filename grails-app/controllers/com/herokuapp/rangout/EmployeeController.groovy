@@ -8,9 +8,7 @@ import grails.converters.JSON
 @Transactional(readOnly = true)
 class EmployeeController extends RestfulController<Employee> {
 
-    static allowedMethods = [
-            save: "POST", list: "GET", delete: "DELETE", update: "PUT", show: "GET"
-    ]
+    static allowedMethods = [save: "POST", list: "GET", delete: "DELETE", update: "PUT", show: "GET"]
 
     EmployeeController() {
         super(Employee)

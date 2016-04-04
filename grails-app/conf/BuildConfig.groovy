@@ -60,18 +60,31 @@ grails.project.dependency.resolution = {
 
         // plugins for the compile step
         compile ":scaffolding:2.1.2"
-        compile ':cache:1.1.8'
+        compile ":cache:1.1.8"
         compile ":asset-pipeline:2.1.5"
-        compile ':heroku:1.0.1'
-        compile ':cloud-support:1.0.11'
+
+        compile ':rest-client-builder:2.0.3'
+        compile ":heroku:1.0.1", {
+            exclude 'database-session'
+        }
+
+        compile ":cloud-support:1.0.11"
         compile ":marshallers:0.6"
         compile ":facebook-sdk:0.5.0"
-        compile ":constraints:0.8.0"
+
+        // Spring Security includes cors plugin 1.1.6, don't use it
+        compile ":spring-security-rest:1.5.3", {
+            excludes 'spring-security-core', 'cors'
+        }
+
+        compile ":spring-security-core:2.0.0"
 
         // plugins needed at runtime but not for compilation
         runtime ":hibernate4:4.3.8.1" // or ":hibernate:3.6.10.18"
         runtime ":database-migration:1.4.0"
         runtime ":jquery:1.11.1"
+        // Don't upgrade to 1.1.6, errors with current grails version!
+        runtime ':cors:1.1.5'
 
         // Uncomment these to enable additional asset-pipeline capabilities
         //compile ":sass-asset-pipeline:1.9.0"
