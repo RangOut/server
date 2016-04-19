@@ -116,7 +116,8 @@ log4j.main = {
     debug  'grails.app.controllers',
            'grails.app.conf',
            'grails.app.domain',
-           'grails.app.services'
+           'grails.app.services',
+            'grails.app.jobs'
     error  'grails.plugin.heroku',
            'grails.plugin.cloudsupport'
 }
@@ -134,6 +135,7 @@ grails.views.gsp.sitemesh.preprocess = false
 grails.app.context = "/"
 
 // Added by the Spring Security Core plugin:
+grails.plugin.springsecurity.rememberMe.persistent = true
 grails.plugin.springsecurity.userLookup.userDomainClassName = 'com.herokuapp.rangout.Employee'
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'com.herokuapp.rangout.EmployeeRole'
 grails.plugin.springsecurity.authority.className = 'com.herokuapp.rangout.Role'
@@ -165,7 +167,6 @@ grails.plugin.springsecurity.interceptUrlMap = [
 // Lock everything down by default, return 403
 grails.plugin.springsecurity.rejectIfNoRule=true
 grails.plugin.springsecurity.fii.rejectPublicInvocations=false
-//grails.plugin.springsecurity.securityConfigType="Annotation"
 
 //login
 grails.plugin.springsecurity.rest.login.active=true
@@ -174,25 +175,28 @@ grails.plugin.springsecurity.rest.login.failureStatusCode=401
 
 //TODO: enable me, it's more RESTFUL
 grails.plugin.springsecurity.rest.login.useJsonCredentials=true
-grails.plugin.springsecurity.rest.login.usernamePropertyName='username'
-grails.plugin.springsecurity.rest.login.passwordPropertyName='password'
-
 grails.plugin.springsecurity.rest.login.useRequestParamsCredentials=false
 grails.plugin.springsecurity.rest.login.usernamePropertyName='username'
 grails.plugin.springsecurity.rest.login.passwordPropertyName='password'
 
 //logout
 grails.plugin.springsecurity.rest.logout.endpointUrl='/api/logout'
-grails.plugin.springsecurity.rest.token.validation.headerName='X-Auth-Token'
 
 //token generation
 grails.plugin.springsecurity.rest.token.generation.useSecureRandom=true
 grails.plugin.springsecurity.rest.token.generation.useUUID=false
 
+//use Memcached
+grails.plugin.springsecurity.rest.token.storage.useMemcached=false
+grails.plugin.springsecurity.rest.token.storage.memcached.hosts='localhost:11211'
+grails.plugin.springsecurity.rest.token.storage.memcached.username=''
+grails.plugin.springsecurity.rest.token.storage.memcached.password=''
+grails.plugin.springsecurity.rest.token.storage.memcached.expiration=3600
+
 //use GROM
-grails.plugin.springsecurity.rest.token.storage.useGorm=false
+grails.plugin.springsecurity.rest.token.storage.useGorm=true
 grails.plugin.springsecurity.rest.token.storage.gorm.tokenDomainClassName='com.herokuapp.rangout.AuthenticationToken'
-grails.plugin.springsecurity.rest.token.storage.gorm.tokenValuePropertyName='token'
+grails.plugin.springsecurity.rest.token.storage.gorm.tokenValuePropertyName='tokenValue'
 grails.plugin.springsecurity.rest.token.storage.gorm.usernamePropertyName='username'
 
 grails.plugin.springsecurity.rest.token.storage.useGrailsCache=false
@@ -206,7 +210,6 @@ grails.plugin.springsecurity.rest.token.rendering.tokenPropertyName='token'
 //token validate
 grails.plugin.springsecurity.rest.token.validation.useBearerToken=false
 grails.plugin.springsecurity.rest.token.validation.headerName='X-Auth-Token'
-grails.plugin.springsecurity.rest.token.validation.active=true
 grails.plugin.springsecurity.rest.token.validation.endpointUrl='/api/validate'
 
 cors.enabled=true
@@ -225,30 +228,3 @@ grails.plugin.springsecurity.filterChain.chainMap = [
         '/api/**': 'JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-rememberMeAuthenticationFilter',  // Stateless chain
         '/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restExceptionTranslationFilter'                                                                          // Traditional chain
 ]
-
-// Example: http://alvarosanchez.github.io/grails-spring-security-rest/docs/guide/single.html#
-//grails {
-//    plugin {
-//        springsecurity {
-//            filterChain {
-//                chainMap = [
-//                        '/api/guest/**': 'anonymousAuthenticationFilter,restTokenValidationFilter,restExceptionTranslationFilter,filterInvocationInterceptor',
-//                        '/api/**'      : 'JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-rememberMeAuthenticationFilter',
-//                        '/**'          : 'JOINED_FILTERS,-restTokenValidationFilter,-restExceptionTranslationFilter'
-//                ]
-//            }
-//            rest {
-//                token {
-//                    validation {
-//                        enableAnonymousAccess = true
-//                    }
-//                }
-//            }
-//        }
-//    }
-//}
-
-//grails.plugin.facebooksdk.app.id = 1533498036951268
-//grails.plugin.facebooksdk.app.permissions = ['public_profile', 'email'] // Ex. ['email','public_profile']
-//grails.plugin.facebooksdk.app.secret = "ee1a0aea70f9ccd5301c38ce20f93b86"
-//grails.plugin.facebooksdk.apiVersion = 'v2.3'

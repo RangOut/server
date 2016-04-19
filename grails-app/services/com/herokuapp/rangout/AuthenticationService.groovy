@@ -4,6 +4,7 @@ import grails.transaction.Transactional
 
 @Transactional
 class AuthenticationService {
+
     def springSecurityService
 
     /**
