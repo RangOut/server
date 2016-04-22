@@ -9,7 +9,7 @@ class Order {
 
     static constraints = {
         customerId nullable: false
-        total nullable: false, min: 0
+        total nullable: false //TODO(clenimar): assert total>0
         items nullable: false, validator: {value -> return !value.isEmpty()}
     }
 
@@ -17,8 +17,8 @@ class Order {
         table 'order'
         customerId column: 'customerId'
         total column: 'total'
-        items jonTable: [
-                name: 'items'
+        items joinTable: [
+                name: 'items',
                 column: 'item_name'
                 //TODO(clenimar): finish this...
         ]

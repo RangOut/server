@@ -14,7 +14,7 @@ class Item {
         name nullable: false
         description nullable: true
         category nullable: true
-        price nullable: false, min: 0
+        price nullable: false //TODO(clenimar): assert price>0
     }
 
     static mapping = {
@@ -23,9 +23,9 @@ class Item {
         description column: 'description'
         category column: 'category'
         price column: 'price'
-        ingredients jonTable: [
-                name: 'item_ingredients'
-                column: 'ingredient'
+        ingredients joinTable: [
+                name: 'item_ingredients',
+                column: 'ingredient',
                 type: 'text'
         ]
         cache true
