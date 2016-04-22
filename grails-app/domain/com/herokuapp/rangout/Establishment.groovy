@@ -16,7 +16,7 @@ class Establishment {
     Manager manager
     Set<Employee> employees = new HashSet<>()
 
-    static hasMany  = [employees: Employee, telephones: String, cellphones: String, items: Items]
+    static hasMany  = [employees: Employee, telephones: String, cellphones: String, items: Item]
     static embedded = ['address']
 
     static constraints = {
