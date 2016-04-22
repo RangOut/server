@@ -49,7 +49,7 @@ class EmployeeRole implements Serializable {
         if (e == null || r == null) return false
 
         int rowCount = EmployeeRole.where {
-            employee == User.load(e.id) && role == Role.load(r.id)
+            employee == Employee.load(e.id) && role == Role.load(r.id)
         }.deleteAll()
 
         if (flush) {
@@ -64,7 +64,7 @@ class EmployeeRole implements Serializable {
         if (e == null) return
 
         EmployeeRole.where {
-            employee == User.load(e.id)
+            employee == Employee.load(e.id)
         }.deleteAll()
 
         if(flush) {

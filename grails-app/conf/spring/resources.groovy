@@ -19,4 +19,8 @@ beans = {
     establishmentSaveRenderer(JsonRenderer, Establishment) {
         namedConfiguration = 'establishmentSave'
     }
+
+    userDetailsService(com.herokuapp.rangout.CustomUserDetailsService) {
+        grailsApplication = ref('grailsApplication')
+    }
 }

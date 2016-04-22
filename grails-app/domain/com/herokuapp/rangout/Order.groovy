@@ -6,7 +6,6 @@ class Order {
     Double total
 
     static hasMany = [items: Item]
-    static belongsTo = [user: User]
 
     static constraints = {
         customerId nullable: false

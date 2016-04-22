@@ -1,7 +1,6 @@
 package com.herokuapp.rangout
 
 import grails.rest.*
-import java.security.MessageDigest
 
 @Resource(uri='/employees', readOnly=false, formats=['json'])
 class Employee {
@@ -20,7 +19,7 @@ class Employee {
         name nullable: false
         establishment nullable: false
         password nullable: false, matches: "^(?=.*\\d).{6,}\$"
-        username nullable: false, matches: "(?=^.{3,}\$)^[a-zA-Z][a-zA-Z0-9]*[._-]?[a-zA-Z0-9]+\$"
+        username nullable: false, unique: true, matches: "(?=^.{3,}\$)^[a-zA-Z][a-zA-Z0-9]*[._-]?[a-zA-Z0-9]+\$"
     }
 
     static mapping = {
@@ -41,7 +40,9 @@ class Employee {
     }
 
     def beforeUpdate() {
-        if(isDirty('password')) encodePassword()
+        if (isDirty('password')) {
+            encodePassword()
+        }
     }
 
     protected void encodePassword() {

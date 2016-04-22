@@ -63,21 +63,20 @@ grails.project.dependency.resolution = {
         compile ":cache:1.1.8"
         compile ":asset-pipeline:2.1.5"
 
-        compile ':rest-client-builder:2.0.3'
-        compile ":heroku:1.0.1", {
-            exclude 'database-session'
-        }
-
-        compile ":cloud-support:1.0.11"
-        compile ":marshallers:0.6"
-        compile ":facebook-sdk:0.5.0"
-
+        compile ":spring-security-core:2.0-RC4"
+        compile ":spring-security-ui:1.0-RC2"
         // Spring Security includes cors plugin 1.1.6, don't use it
         compile ":spring-security-rest:1.5.3", {
             excludes 'spring-security-core', 'cors'
         }
 
-        compile ":spring-security-core:2.0.0"
+        compile ':rest-client-builder:2.0.3'
+        compile ':quartz:1.0.2'
+        compile ":marshallers:0.6"
+        compile ":cloud-support:1.0.11"
+        compile ":heroku:1.0.1", {
+            exclude 'database-session'
+        }
 
         // plugins needed at runtime but not for compilation
         runtime ":hibernate4:4.3.8.1" // or ":hibernate:3.6.10.18"

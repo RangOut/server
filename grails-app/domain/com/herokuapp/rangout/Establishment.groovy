@@ -14,6 +14,7 @@ class Establishment {
 
     Address address
     Manager manager
+    Set<Employee> employees = new HashSet<>()
 
     static hasMany  = [employees: Employee, telephones: String, cellphones: String, items: Items]
     static embedded = ['address']

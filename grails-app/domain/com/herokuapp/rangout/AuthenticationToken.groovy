@@ -2,12 +2,12 @@ package com.herokuapp.rangout
 
 class AuthenticationToken {
 
-    String token
     String username
+    String tokenValue
     Date refreshed = new Date()
 
     static constraints = {
-        token blank: false
+        tokenValue blank: false
         username blank: false, unique: true
     }
 

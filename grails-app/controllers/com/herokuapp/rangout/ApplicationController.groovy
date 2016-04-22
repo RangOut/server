@@ -39,7 +39,7 @@ class ApplicationController {
         }
 
         manager.validate()
-        if(establishment.manager.hasErrors()) {
+        if(manager.hasErrors()) {
             def errors = manager.errors
             if('unique' == errors?.getFieldError('email')?.code) {
                 return Api.resourceUsed(this, 'This email is already being used. Please choose another email.')
@@ -63,10 +63,14 @@ class ApplicationController {
                 return Api.Unexpected(this)
             }
         }
-
+        establishment.employees.add(manager)
         establishment.save()
-        def role = new EmployeeRole(employee: manager, role: Role.findByAuthority('MANAGER_ROLE'))
-        role.save(flush: true, insert: true, failOnError: true)
+
+        def managerRole = new EmployeeRole(employee: manager, role: Role.findByAuthority('MANAGER_ROLE'))
+        managerRole.save(flush: true, insert: true, failOnError: true)
+        
+        def employeeRole = new EmployeeRole(employee: manager, role: Role.findByAuthority('EMPLOYEE_ROLE'))
+        employeeRole.save(flush: true, insert: true, failOnError: true)
 
         response.status = 201
         render establishment as JSON
