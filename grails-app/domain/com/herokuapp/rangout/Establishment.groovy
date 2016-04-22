@@ -15,7 +15,7 @@ class Establishment {
     Address address
     Manager manager
 
-    static hasMany  = [employees: Employee, telephones: String, cellphones: String]
+    static hasMany  = [employees: Employee, telephones: String, cellphones: String, items: Items]
     static embedded = ['address']
 
     static constraints = {
@@ -42,6 +42,7 @@ class Establishment {
         manager nullable: true
         telephones nullable: false, validator: {value -> return !value.isEmpty()}
         cellphones nullable: true
+        //TODO(clenimar): constraint: item list is non-nullable
     }
 
     static mapping = {
@@ -61,6 +62,7 @@ class Establishment {
                 column: 'cellphone',
                 type: 'text'
         ]
+        //TODO(clenimar): add item list
     }
 }
 

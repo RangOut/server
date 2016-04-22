@@ -6,6 +6,7 @@ import grails.rest.*
 class User {
 
     String oAuth
+    static hasMany = [orders: Order]
 
     static constraints = {
         oAuth unique: true, nullable: false
