@@ -9,14 +9,20 @@ class RemoveStaleTokensJob {
 
     def execute() {
         log.debug "Searching for expired tokens..."
-        def results = AuthenticationToken.withCriteria {
-            def fourteenDays = use(TimeCategory) {
-                new Date() - 14.days
-            }
-            lt('refreshed', fourteenDays)
+
+        def c = AuthenticationToken.createCriteria()
+        def results = c {
+            or {
+                def fourteenDays = use(TimeCategory) {
+                    new Date() - 14.hours
+                }
+                eq('expired', true)
+                lt('refreshed', fourteenDays)
+               }
         }
         results?.each { token ->
-            log.debug "Token ${token.token} expired, deleting..."
+            log.debug "Token ${token.tokenValue} expired, deleting..."
+
             AuthenticationToken.withTransaction() {
                 token.delete(flush: true)
             }

@@ -4,11 +4,13 @@ class AuthenticationToken {
 
     String username
     String tokenValue
-    Date refreshed = new Date()
+
+    boolean expired = false
+    Date refreshed  = new Date()
 
     static constraints = {
-        tokenValue blank: false
-        username blank: false, unique: true
+        tokenValue nullable: false, blank: false
+        username   nullable: false, blank: false
     }
 
     static mapping = {
@@ -18,5 +20,16 @@ class AuthenticationToken {
     def afterLoad() {
         refreshed = new Date()
         this?.save()
+    }
+
+    def afterInsert() {
+        def results = AuthenticationToken.findAllByRefreshedLessThanAndUsernameAndExpired(refreshed, username, false)
+
+        results?.each { token ->
+            AuthenticationToken.withTransaction() {
+                token.setExpired(true)
+                token.save()
+            }
+        }
     }
 }

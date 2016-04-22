@@ -14,9 +14,11 @@ class Establishment {
 
     Address address
     Manager manager
+
+    Set<Item> menu = new HashSet<>()
     Set<Employee> employees = new HashSet<>()
 
-    static hasMany  = [employees: Employee, telephones: String, cellphones: String]
+    static hasMany  = [employees: Employee, menu: Item, telephones: String, cellphones: String]
     static embedded = ['address']
 
     static constraints = {
@@ -54,14 +56,16 @@ class Establishment {
         manager column: 'manager_id'
         telephones joinTable: [
                 name: 'tel_establishment',
+                key: 'est_id',
                 column: 'telephone',
                 type: 'text',
-        ]
+        ], cascade: 'all-delete-orphan'
         cellphones joinTable: [
                 name: 'cel_establishment',
+                key: 'est_id',
                 column: 'cellphone',
                 type: 'text'
-        ]
+        ], cascade: 'all-delete-orphan'
     }
 }
 

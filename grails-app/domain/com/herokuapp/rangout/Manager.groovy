@@ -13,7 +13,7 @@ class Manager extends Employee {
     }
 
     static mapping = {
-        table 'managers'
+        table 'manager'
         email column: 'email'
     }
 }
