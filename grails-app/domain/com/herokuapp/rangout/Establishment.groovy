@@ -45,6 +45,7 @@ class Establishment {
         manager nullable: true
         telephones nullable: false, validator: {value -> return !value.isEmpty()}
         cellphones nullable: true
+        //TODO(clenimar): constraint: item list is non-nullable
     }
 
     static mapping = {

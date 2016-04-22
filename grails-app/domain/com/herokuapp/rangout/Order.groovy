@@ -23,10 +23,10 @@ class Order {
         closed column: 'closed'
         attended column: 'attended'
         items joinTable: [
-                name: 'ordered_item',
-                key: 'ordered_id',
+                name  : 'ordered_item',
+                key   : 'ordered_id',
                 column: 'item_id',
-                type: long
+                type  : long
         ], cascade: 'all-delete-orphan'
     }
 }

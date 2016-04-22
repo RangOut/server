@@ -31,7 +31,7 @@ class Item {
         ingredients joinTable: [
                 name: 'item_ingredient',
                 key: 'item_id',
-                column: 'ingredient_id',
+                column: 'ingredient',
                 type: 'text'
         ], cascade: 'all-delete-orphan'
     }
