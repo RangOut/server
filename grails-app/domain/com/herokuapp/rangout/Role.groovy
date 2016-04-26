@@ -5,7 +5,7 @@ class Role {
     String authority
 
     static constraints = {
-        authority blank: false, unique: true
+        authority nullable: false, blank: false, unique: true
     }
 
     static mapping = {

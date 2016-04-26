@@ -22,30 +22,21 @@ class Establishment {
     static embedded = ['address']
 
     static constraints = {
-        name nullable: false
-        nickname unique: true, nullable: false
-        cnpj unique: true, nullable: true, matches: "^(\\d{2}.?\\d{3}.?\\d{3}\\/?\\d{4}-?\\d{2})\$"
-        address nullable: false, validator: { value, object, errors ->
-            if(value.cep != null && !(value.cep ==~ "^[0-9]{5}([-/]?[0-9]{3,4})?\$"))
-                errors.rejectValue('address.cep', 'matches.invalid')
-            if(!(value.number ==~ "(^N/A\$)|^[1-9]\\d*([- s]?[A-Z])*\$"))
-                errors.rejectValue('address.number', 'matches.invalid')
-            if(value.street == null || value.number == null || value.neighborhood == null)
-                errors.rejectValue('address', 'null.attribute.address')
-            if(value.city == null || value.state == null || value.country == null)
-                errors.rejectValue('address', 'null.attribute.address')
+        name nullable: false, blank: false
+        cnpj nullable: true,  blank: false, unique: true, matches: "^(\\d{2}.?\\d{3}.?\\d{3}\\/?\\d{4}-?\\d{2})\$"
 
-            for(Establishment establishment : object.list()) {
-                if(value.id != establishment.address.id && value == establishment.address) {
-                    errors.rejectValue('address', 'unique')
+        manager    nullable: true
+        nickname   nullable: false, blank: false, unique: true
+        telephones nullable: false, blank: false, validator: {value -> return !value.isEmpty()}
+        cellphones nullable: true
 
-                }
+        address nullable: false, blank:false, validator: { value, object, errors ->
+            object.list()?.each { objEst ->
+                if (value.id != objEst.address.id && value.equals(objEst.address))
+                    errors.reject('address', 'unique')
             }
         }
-        manager nullable: true
-        telephones nullable: false, validator: {value -> return !value.isEmpty()}
-        cellphones nullable: true
-        //TODO(clenimar): constraint: item list is non-nullable
+        menu nullable: false, black: false, validator: { value -> return !value.isEmpty() }
     }
 
     static mapping = {
@@ -83,14 +74,15 @@ class Address {
     String complement
 
     static constraints = {
-        cep nullable: true, matches: "^[0-9]{5}([-/]?[0-9]{3,4})?\$"
-        street nullable: false
-        number nullable: false, matches: "^N\\/A\$|^\\d+([-\\s]?[A-Z])*\$"
-        neighborhood nullable: false
-        city nullable: false
-        state nullable: false
-        country nullable: false
-        complement nullable: true
+        street       nullable: false, blank: false
+        neighborhood nullable: false, blank: false
+        city         nullable: false, blank: false
+        state        nullable: false, blank: false
+        country      nullable: false, blank: false
+        complement   nullable: true,  blank: false
+
+        cep          nullable: true,  matches: "^[0-9]{5}([-/]?[0-9]{3,4})?\$"
+        number       nullable: false, blank: false, matches: "^N\\/A\$|^\\d+([-\\s]?[A-Z])*\$"
     }
 
     static mapping = {

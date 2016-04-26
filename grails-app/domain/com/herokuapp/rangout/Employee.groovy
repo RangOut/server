@@ -16,10 +16,11 @@ class Employee {
     static transients = ['securityService', 'springSecurityService']
 
     static constraints = {
-        name nullable: false
-        establishment nullable: false
-        password nullable: false, matches: "^(?=.*\\d).{6,}\$"
-        username nullable: false, unique: true, matches: "(?=^.{3,}\$)^[a-zA-Z][a-zA-Z0-9]*[._-]?[a-zA-Z0-9]+\$"
+        name     nullable: false, blank: false
+        password nullable: false, blank: false, matches: "^(?=.*\\d).{6,}\$"
+        username nullable: false, blank: false, unique: true, matches: "(?=^.{3,}\$)^[a-zA-Z][a-zA-Z0-9]*[._-]?[a-zA-Z0-9]+\$"
+
+        establishment nullable: false, blank: false
     }
 
     static mapping = {
