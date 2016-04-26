@@ -1,5 +1,8 @@
 package com.herokuapp.rangout
 
+import groovy.transform.EqualsAndHashCode
+
+@EqualsAndHashCode(includes = ['name', 'category'])
 class Item {
 
     String name
@@ -15,9 +18,13 @@ class Item {
 
 
     static constraints = {
-        name nullable: false, blank: false
-        category nullable: false, blank: false
-        price nullable: false, blank: false, validator: {value -> return value > 0}
+        name        nullable: false, blank: false
+        description nullable: true
+        category    nullable: false, blank: false
+        price       nullable: false, blank: false, validator: {value -> return value >= 0}
+        ingredients nullable: true
+
+        establishment nullable: true
     }
 
     static mapping = {

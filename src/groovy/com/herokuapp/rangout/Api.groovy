@@ -6,14 +6,14 @@ class Api {
 
     final static String nothing = ''
 
-    static UsernamePasswordNotSpecified(controller) {
+    static usernamePasswordNotSpecified(controller) {
         controller.response.status = 400
         controller.render(contentType: 'application/json') {
             new ApiResponse('Email/Username and password must be specified', 1010)
         }
     }
 
-    static IncorrectUsernameOrPassword(controller) {
+    static incorrectUsernameOrPassword(controller) {
         controller.response.status = 401
         controller.render(contentType: 'application/json') { new ApiResponse('Username / Password are incorrect', 1020) }
     }
@@ -30,14 +30,14 @@ class Api {
         controller.render(contentType: 'application/json') { new ApiResponse(message, 1020) }
     }
 
-    static Unexpected(controller, exception=null) {
+    static unexpected(controller, exception=null) {
         def message = ('Unexpected Error ' + exception?.message)?.trim()
 
         controller.response.status = 400
         controller.render(contentType: 'application/json') { new ApiResponse(message) }
     }
 
-    static Exception(controller, exception=null) {
+    static exception(controller, exception=null) {
         controller.response.status = 400
         controller.render(contentType: 'application/json') { new ApiResponse('Unexpected Error: ' + exception?.message) }
     }
@@ -49,7 +49,7 @@ class Api {
         }
     }
 
-    static MissingToken(controller) {
+    static missingToken(controller) {
         controller.response.status = 400
         controller.render(contentType: 'application/json') { new ApiResponse('Invalid or missing authentication token', 1010) }
     }
@@ -64,49 +64,49 @@ class Api {
         controller.render(contentType: 'application/json') { new ApiResponse(message, 1010, paramList) }
     }
 
-    static ProviderNotSupported(controller) {
+    static providerNotSupported(controller) {
         controller.response.status = 400
         controller.render(contentType: 'application/json') { new ApiResponse('Cloud Account type not supported', 3004) }
     }
 
-    static InvalidProviderId(controller) {
+    static invalidProviderId(controller) {
         controller.response.status = 400
         controller.render(contentType: 'application/json') { new ApiResponse('Invalid Provider Id specified', 3000) }
     }
 
-    static ProviderNotFound(controller) {
+    static providerNotFound(controller) {
         controller.response.status = 400
         controller.render(contentType: 'application/json') { new ApiResponse('Cloud Account id not found') }
     }
 
-    static InvalidInstanceParameter(controller) {
+    static invalidInstanceParameter(controller) {
         controller.response.status = 400
         controller.render(contentType: 'application/json') { new ApiResponse('Invalid Instance parameter specified', 4030) }
     }
 
-    static InvalidInstanceId(controller) {
+    static invalidInstanceId(controller) {
         controller.response.status = 400
         controller.render(contentType: 'application/json') { new ApiResponse('Invalid Instance Id', 4000) }
     }
 
-    static ServiceNotFound(controller) {
+    static serviceNotFound(controller) {
         controller.response.status = 400
         controller.render(contentType: 'application/json') { new ApiResponse('Service alias not found') }
     }
 
-    static IncorrectServiceParameter(controller, parameter, allowedValues) {
+    static incorrectServiceParameter(controller, parameter, allowedValues) {
         controller.response.status = 400
         controller.render(contentType: 'application/json') {
             new ApiResponse("${parameter} is incorrect format, allowed values are: ${allowedValues}", 1020)
         }
     }
 
-    static InvalidUserServiceId(controller) {
+    static invalidUserServiceId(controller) {
         controller.response.status = 400
         controller.render(contentType: 'application/json') { new ApiResponse('Invalid UserService Id', 4000) }
     }
 
-    static BadRequest(controller) {
+    static badRequest(controller) {
         controller.response.status = 400
         controller.render(contentType: 'application/json') { nothing }
     }

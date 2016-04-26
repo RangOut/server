@@ -17,6 +17,10 @@ beans = {
     }
 
     establishmentSaveRenderer(JsonRenderer, Establishment) {
+        namedConfiguration = 'establishmentList'
+    }
+
+    establishmentSaveRenderer(JsonRenderer, Establishment) {
         namedConfiguration = 'establishmentSave'
     }
 

@@ -8,8 +8,9 @@ class Manager extends Employee {
     String email
 
     static constraints = {
+        email nullable: false, blank: false, unique: true, email: true
+
         establishment nullable: true
-        email unique: true, nullable: false, email: true
     }
 
     static mapping = {
