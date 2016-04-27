@@ -174,3 +174,7 @@ crashlytics-build.properties
 
 # TeXlipse plugin
 # .texlipse
+
+# Application files
+application.properties
+.sonar/

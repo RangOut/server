@@ -111,10 +111,6 @@ class Api {
         controller.render(contentType: 'application/json') { nothing }
     }
 
-    static created(controller, object) {
-
-    }
-
     static ok(controller, data=null) {
         def message = nothing
 
