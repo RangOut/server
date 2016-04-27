@@ -160,6 +160,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/api/login':                     ['permitAll'],
         '/api/validate':                  ['permitAll'],
         '/api/status':                    ['permitAll'],
+        '/api/establishments':            ['permitAll'],
         '/dbconsole*/**':                 ['permitAll'],
         '/api/**':				          ['isFullyAuthenticated()']]
 

@@ -2,6 +2,7 @@ package com.herokuapp.rangout
 
 import grails.converters.JSON
 import grails.plugin.springsecurity.annotation.Secured
+import grails.rest.RestfulController
 import grails.transaction.Transactional
 import groovy.json.JsonParserType
 import groovy.json.JsonSlurper
@@ -10,7 +11,23 @@ import groovy.json.JsonSlurper
 @Secured(['isFullyAuthenticated()'])
 class ApplicationController {
 
-    static allowedMethods = [signup: "POST"]
+    static allowedMethods = [index: "GET", signup: "POST"]
+
+    def grailsApplication
+
+    @Secured(["permitAll"])
+    def index() {
+        def statusResponse = [
+                'api' : [
+                        'app'        : grailsApplication.metadata['app.name'],
+                        'version'    : grailsApplication.metadata['app.version'],
+                        'build'      : grailsApplication.metadata['app.buildId'],
+                        'lastUpdated': grailsApplication.metadata['app.buildDate']
+                ],
+                'status' : "up"
+        ]
+        Api.ok(this, statusResponse)
+    }
 
     @Secured(["permitAll"])
     def signup() {
@@ -36,7 +53,6 @@ class ApplicationController {
         if (establishment.hasErrors()) {
             def errors = establishment.errors
         }
-
 
 //        establishment.validate()
 //        if(establishment.hasErrors()) {
@@ -92,10 +108,18 @@ class ApplicationController {
 
         def managerRole = new EmployeeRole(employee: manager, role: Role.findByAuthority('MANAGER_ROLE'))
         managerRole.save(flush: true, insert: true, failOnError: true)
-        
+
         def employeeRole = new EmployeeRole(employee: manager, role: Role.findByAuthority('EMPLOYEE_ROLE'))
         employeeRole.save(flush: true, insert: true, failOnError: true)
-        
-        return Api.created(this, 'establishmentSave')
+
+        response.status = 201
+        JSON.use('establishmentSave') {
+            render(contentType: 'application/json') {[
+                    establishment: establishment,
+                    status: 'ok',
+                    message: "Establishment " + establishment.name +
+                             " registered with success under nickname: " + establishment.nickname
+            ]}
+        }
     }
 }

@@ -2,7 +2,7 @@ package com.herokuapp.rangout
 
 import groovy.transform.EqualsAndHashCode
 
-@EqualsAndHashCode(includes = ['name'])
+@EqualsAndHashCode(includes = ['name', 'category'])
 class Item {
 
     String name
@@ -22,6 +22,7 @@ class Item {
         description nullable: true
         category    nullable: false, blank: false
         price       nullable: false, blank: false, validator: {value -> return value >= 0}
+        ingredients nullable: true
 
         establishment nullable: true
     }

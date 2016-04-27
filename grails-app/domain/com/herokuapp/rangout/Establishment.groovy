@@ -18,6 +18,9 @@ class Establishment {
     Set<Item> menu = new HashSet<>()
     Set<Employee> employees = new HashSet<>()
 
+    Set<String> telephones = new HashSet<>()
+    Set<String> cellphones = new HashSet<>()
+
     static hasMany  = [employees: Employee, menu: Item, telephones: String, cellphones: String]
     static embedded = ['address']
 

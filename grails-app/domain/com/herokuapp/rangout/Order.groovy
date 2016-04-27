@@ -8,7 +8,7 @@ class Order {
 
     Set<Item> items = new HashSet<>()
 
-    static hasMany   = [items: Item]
+    static hasMany  = [items: Item]
     static belongsTo = [user: User]
 
     static constraints = {
