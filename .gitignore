@@ -177,4 +177,6 @@ crashlytics-build.properties
 
 # Application files
 application.properties
+cobertura.ser
+
 .sonar/

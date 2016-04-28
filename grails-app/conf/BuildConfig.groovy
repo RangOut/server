@@ -85,10 +85,18 @@ grails.project.dependency.resolution = {
         // Don't upgrade to 1.1.6, errors with current grails version!
         runtime ':cors:1.1.5'
 
+        test ":code-coverage:2.0.3-3"
+
         // Uncomment these to enable additional asset-pipeline capabilities
         //compile ":sass-asset-pipeline:1.9.0"
         //compile ":less-asset-pipeline:1.10.0"
         //compile ":coffee-asset-pipeline:1.8.0"
         //compile ":handlebars-asset-pipeline:1.3.0.3"
+    }
+
+    coverage {
+        enabledByDefault = false
+        nopost = true
+        xml = true
     }
 }
