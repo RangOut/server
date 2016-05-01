@@ -1,36 +1,45 @@
 package com.herokuapp.rangout
 
-import grails.rest.*
+import grails.plugins.jsonapis.JsonApi
+import grails.rest.Resource
 import grails.validation.Validateable
 import groovy.transform.EqualsAndHashCode
 
 @Validateable
-@Resource(uri='api/establishments', readOnly=false, formats=['json'])
+@Resource(uri='api/establishment', readOnly=false, formats=['json'])
 class Establishment {
 
+    @JsonApi(['estSave', 'estList'])
     String name
+    @JsonApi(['estSave'])
     String cnpj
+    @JsonApi(['estSave'])
     String nickname
-
+    @JsonApi(['estSave', 'estList'])
     Address address
+    @JsonApi(['estSave'])
     Manager manager
 
+    @JsonApi(['estSave', 'menList'])
     Set<Item> menu = new HashSet<>()
+    Set<Order> orders = new HashSet<>()
     Set<Employee> employees = new HashSet<>()
 
+    @JsonApi(['estSave', 'estList'])
     Set<String> telephones = new HashSet<>()
+    @JsonApi(['estSave'])
     Set<String> cellphones = new HashSet<>()
 
-    static hasMany  = [employees: Employee, menu: Item, telephones: String, cellphones: String]
+    static hasMany  = [employees: Employee, menu: Item, orders: Order, telephones: String, cellphones: String]
     static embedded = ['address']
 
     static constraints = {
         name nullable: false, blank: false
-        cnpj nullable: true,  blank: false, unique: true, matches: "^(\\d{2}.?\\d{3}.?\\d{3}\\/?\\d{4}-?\\d{2})\$"
+        cnpj nullable:  true,  blank: false, unique: true, matches: "^(\\d{2}.?\\d{3}.?\\d{3}\\/?\\d{4}-?\\d{2})\$"
 
         manager    nullable: true
         nickname   nullable: false, blank: false, unique: true
-        telephones nullable: false, blank: false, validator: {value -> return !value.isEmpty()}
+        telephones nullable: false, blank: false, validator: { value -> return !value.isEmpty() }
         cellphones nullable: true
 
         address nullable: false, blank:false, validator: { value, object, errors ->
@@ -39,7 +48,8 @@ class Establishment {
                     errors.reject('address', 'unique')
             }
         }
-        menu nullable: false, black: false, validator: { value -> return !value.isEmpty() }
+        menu   nullable: false, black: false, validator: { value -> return !value.isEmpty() }
+        orders nullable: true
     }
 
     static mapping = {
@@ -67,13 +77,21 @@ class Establishment {
 @EqualsAndHashCode(excludes = ['id', 'cep', 'complement'])
 class Address {
 
+    @JsonApi(['estSave', 'estList'])
     String cep
+    @JsonApi(['estSave', 'estList'])
     String street
+    @JsonApi(['estSave', 'estList'])
     String number
+    @JsonApi(['estSave', 'estList'])
     String neighborhood
+    @JsonApi(['estSave', 'estList'])
     String city
+    @JsonApi(['estSave', 'estList'])
     String state
+    @JsonApi(['estSave', 'estList'])
     String country
+    @JsonApi(['estSave', 'estList'])
     String complement
 
     static constraints = {

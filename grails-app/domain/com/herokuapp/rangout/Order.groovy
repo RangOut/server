@@ -1,19 +1,29 @@
 package com.herokuapp.rangout
 
+import grails.plugins.jsonapis.JsonApi
+
 class Order {
 
+    @JsonApi(['ordList'])
     Double total
+    @JsonApi(['ordList'])
+    Establishment establishment
+
+    @JsonApi(['ordList'])
     boolean closed = false
-    boolean attended = false
+    @JsonApi(['ordList'])
+    Set<OrderItem> items = new HashSet<>()
 
-    Set<Item> items = new HashSet<>()
+    static hasMany = [items: OrderItem]
+    static hasOne  = [establishment: Establishment]
 
-    static hasMany  = [items: Item]
     static belongsTo = [user: User]
 
     static constraints = {
         total nullable: false, blank: false, validator: {value -> return value > 0}
         items validator: {value -> return !value.isEmpty()}
+
+        establishment nullable: false, blank: false
     }
 
     static mapping = {
@@ -21,12 +31,6 @@ class Order {
         version false
         total column: 'total'
         closed column: 'closed'
-        attended column: 'attended'
-        items joinTable: [
-                name  : 'ordered_item',
-                key   : 'ordered_id',
-                column: 'item_id',
-                type  : long
-        ], cascade: 'all-delete-orphan'
+        establishment column: 'est_id'
     }
 }

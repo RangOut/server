@@ -1,10 +1,12 @@
 package com.herokuapp.rangout
 
+import grails.plugins.jsonapis.JsonApi
 import grails.rest.Resource
 
-@Resource(uri='/managers', readOnly=false, formats=['json'])
+@Resource(uri='/manager', readOnly=false, formats=['json'])
 class Manager extends Employee {
 
+    @JsonApi(['estSave'])
     String email
 
     static constraints = {

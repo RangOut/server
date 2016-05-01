@@ -6,17 +6,20 @@ class UrlMappings {
                 // apply constraints here
             }
         }
+        "/api/register" (controller: "application", action: "register", method: "POST", parseRequest: true)
+        "/api/status"   (controller: "application", action: "index", method: "GET")
 
-        "/api/register" (controller: "application", action: "signup", method: "POST", parseRequest: true)
-        "/api/status"   (controller: "application", action: "index")
+        "/api/establishment" (controller: "establishment", action: "list", method: "GET")
 
-        "/api/establishments" (controller: "establishment", action: "list", method: "GET")
+        "/api/establishment/$establishmentId/employee" (controller: "employee", action: "list", method: "GET")
+        "/api/establishment/$establishmentId/employee" (controller: "employee", action: "save", method: "POST")
 
-        "/api/establishments/$establishment_id/employees" (controller: "employee", action: "list", method: "GET")
-        "/api/establishments/$establishment_id/employees" (controller: "employee", action: "save", method: "POST")
-        "/api/establishments/$establishment_id/employees/$employees_id" (controller: "employee", action: "show", method: "GET")
-        "/api/establishments/$establishment_id/employees/$employees_id" (controller: "employee", action: "update", method: "PUT")
-        "/api/establishments/$establishment_id/employees/$employees_id" (controller: "employee", action: "delete", method: "DELETE")
+        "/api/establishment/$establishmentId/menu"  (controller: "establishment", action: "getMenu", method: "GET")
+        "/api/establishment/$establishmentId/order" (controller: "establishment", action: "getOrders", method: "GET")
+
+        "/api/establishment/$establishmentId/employee/$employeeId" (controller: "employee", action: "show", method: "GET")
+        "/api/establishment/$establishmentId/employee/$employeeId" (controller: "employee", action: "update", method: "PUT")
+        "/api/establishment/$establishmentId/employee/$employeeId" (controller: "employee", action: "delete", method: "DELETE")
 
         "/"(view:"/index")
         "500"(view:'/error')

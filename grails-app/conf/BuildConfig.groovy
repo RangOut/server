@@ -70,9 +70,10 @@ grails.project.dependency.resolution = {
             excludes 'spring-security-core', 'cors'
         }
 
-        compile ':rest-client-builder:2.0.3'
-        compile ':quartz:1.0.2'
+        compile ":rest-client-builder:2.0.3"
+        compile ":quartz:1.0.2"
         compile ":marshallers:0.6"
+        compile ":json-apis:0.9"
         compile ":cloud-support:1.0.11"
         compile ":heroku:1.0.1", {
             exclude 'database-session'
