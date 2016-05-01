@@ -9,12 +9,8 @@ def conf = SpringSecurityUtils.securityConfig
 
 // Place your Spring DSL code here
 beans = {
-    employeeListRenderer(JsonRenderer, Employee) {
-        namedConfiguration = 'employeeList'
-    }
-
-    employeeSaveRenderer(JsonRenderer, Employee) {
-        namedConfiguration = 'employeeSave'
+    employeeRenderer(JsonRenderer, Employee) {
+        excludes = ['class', 'establishment', 'password']
     }
 
     addressRenderer(JsonRenderer, Address) {

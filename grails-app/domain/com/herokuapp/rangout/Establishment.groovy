@@ -17,12 +17,14 @@ class Establishment {
     String nickname
     @JsonApi(['estSave', 'estList'])
     Address address
-    @JsonApi(['estSave'])
+    @JsonApi(['estSave', 'empList'])
     Manager manager
 
     @JsonApi(['estSave', 'menList'])
     Set<Item> menu = new HashSet<>()
+
     Set<Order> orders = new HashSet<>()
+    @JsonApi(['empList'])
     Set<Employee> employees = new HashSet<>()
 
     @JsonApi(['estSave', 'estList'])

@@ -6,8 +6,9 @@ import grails.rest.Resource
 @Resource(uri='/employee', readOnly=false, formats=['json'])
 class Employee {
 
-    @JsonApi(['estSave'])
+    @JsonApi(['estSave', 'empSave', 'empList'])
     String name
+    @JsonApi(['empSave', 'empList'])
     String username
     String password
 

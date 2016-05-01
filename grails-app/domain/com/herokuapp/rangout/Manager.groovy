@@ -6,7 +6,7 @@ import grails.rest.Resource
 @Resource(uri='/manager', readOnly=false, formats=['json'])
 class Manager extends Employee {
 
-    @JsonApi(['estSave'])
+    @JsonApi(['estSave', 'empList'])
     String email
 
     static constraints = {

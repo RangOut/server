@@ -21,7 +21,7 @@ class EstablishmentController {
         }
     }
 
-    @Secured(["EMPLOYEE_ROLE"])
+    @Secured(["ROLE_EMPLOYEE"])
     def getOrders() {
         def establishment = Establishment.findById(params?.long('establishmentId', 0))
 
@@ -41,7 +41,7 @@ class EstablishmentController {
         }
     }
 
-    @Secured(["EMPLOYEE_ROLE"])
+    @Secured(["ROLE_EMPLOYEE"])
     def getMenu() {
         def establishment = Establishment.findById(params?.long('establishmentId', 0))
 

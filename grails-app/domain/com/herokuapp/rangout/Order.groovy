@@ -5,7 +5,7 @@ import grails.plugins.jsonapis.JsonApi
 class Order {
 
     @JsonApi(['ordList'])
-    Double total
+    Double total = 0
     @JsonApi(['ordList'])
     Establishment establishment
 
@@ -32,5 +32,11 @@ class Order {
         total column: 'total'
         closed column: 'closed'
         establishment column: 'est_id'
+    }
+
+    def beforeValidate() {
+        items.each { orderItem ->
+            total += orderItem.item.price
+        }
     }
 }

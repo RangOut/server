@@ -103,19 +103,18 @@ class ApplicationController {
         }
         establishment.save()
 
-        def managerRole = new EmployeeRole(employee: manager, role: Role.findByAuthority('MANAGER_ROLE'))
+        def managerRole = new EmployeeRole(employee: manager, role: Role.findByAuthority('ROLE_MANAGER'))
         managerRole.save(flush: true, insert: true, failOnError: true)
 
-        def employeeRole = new EmployeeRole(employee: manager, role: Role.findByAuthority('EMPLOYEE_ROLE'))
+        def employeeRole = new EmployeeRole(employee: manager, role: Role.findByAuthority('ROLE_EMPLOYEE'))
         employeeRole.save(flush: true, insert: true, failOnError: true)
 
-        response.status = 201
+        def message = "Establishment " + establishment.name + " registered with success under nickname: " + establishment.nickname
         JSON.use('estSave') {
-            render(contentType: 'application/json') {[
+            render(status: 201, contentType: 'application/json') {[
                     establishment: establishment,
-                    status: 'ok',
-                    message: "Establishment " + establishment.name +
-                             " registered with success under nickname: " + establishment.nickname
+                    message: message,
+                    status : 'ok'
             ]}
         }
     }

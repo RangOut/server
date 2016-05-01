@@ -12,7 +12,7 @@ class UrlMappings {
         "/api/establishment" (controller: "establishment", action: "list", method: "GET")
 
         "/api/establishment/$establishmentId/employee" (controller: "employee", action: "list", method: "GET")
-        "/api/establishment/$establishmentId/employee" (controller: "employee", action: "save", method: "POST")
+        "/api/establishment/$establishmentId/employee" (controller: "employee", action: "save", method: "POST", parseRequest: true)
 
         "/api/establishment/$establishmentId/menu"  (controller: "establishment", action: "getMenu", method: "GET")
         "/api/establishment/$establishmentId/order" (controller: "establishment", action: "getOrders", method: "GET")

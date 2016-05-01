@@ -1,28 +1,34 @@
 package com.herokuapp.rangout
 
-import grails.rest.RestfulController
+import grails.plugin.springsecurity.annotation.Secured
 import grails.transaction.*
 
 import grails.converters.JSON
+import org.springframework.context.support.StaticMessageSource
 
 @Transactional(readOnly = true)
-class EmployeeController extends RestfulController<Employee> {
+@Secured(['isFullyAuthenticated()'])
+class EmployeeController {
 
     static allowedMethods = [save: "POST", list: "GET", delete: "DELETE", update: "PUT", show: "GET"]
 
-    EmployeeController() {
-        super(Employee)
-    }
-
+    @Secured(["ROLE_MANAGER"])
     def list() {
-        long establishment_id = params?.long("establishment_id")
-        def establishment = Establishment.findById(establishment_id)
+        def establishment = Establishment.findById(params?.long('establishmentId', 0))
 
-        def employees = Employee.findAllByEstablishment(establishment)
-        JSON.use("employeeList") {
+        if (establishment == null) {
+            def statusResponse = [
+                    message: 'Establishment NOT FOUND',
+                    status : 'error'
+            ]
+            return Api.error(this, 404, statusResponse)
+        }
+        response.status = 200
+        JSON.use('empList') {
             render(contentType: 'application/json') {[
-                employees:  employees,
-                status:     employees.isEmpty() ? "Nothing present" : "OK"
+                    employees: establishment.employees,
+                    manager  : establishment.manager,
+                    status: 'ok'
             ]}
         }
     }
@@ -31,31 +37,53 @@ class EmployeeController extends RestfulController<Employee> {
 
     }
 
+    @Secured(["ROLE_MANAGER"])
     def save() {
-        String name = params?.name
-        String username = params?.username
-        String password = params?.password
-        String establishment_id = params?.establishment_id
+        def object = request.JSON
+        def establishment = Establishment.findById(params?.long('establishmentId', 0))
 
-        Establishment establishment = Establishment.findById(Long.parseLong(establishment_id))
-        def employee =
-                new Employee(name: name, username: username, password: password, establishment: establishment)
-
-        String message;
-        if(employee.validate()) {
-            employee.save()
-            response.status = 201
-            message = "Employee " + employee.name +
-                    " registered with success in the establishment " + establishment.name
-        } else {
-            response.status = 400
-            message = "Employee not registered, please check the constraints to register a employees"
+        if (establishment == null) {
+            def statusResponse = [
+                    message: 'Establishment NOT FOUND',
+                    status : 'error'
+            ]
+            return Api.error(this, 404, statusResponse)
         }
-        JSON.use("employeeSave") {
-            render(contentType: 'application/json') {[
-                employee:   employee.hasErrors() ? []      : employee,
-                status:     employee.hasErrors() ? "error" : "OK",
-                message:    message
+        def name     = object['name']
+        def username = object['username']
+        def password = object['password']
+        def employee = new Employee(name: name, username: username, password: password, establishment: establishment)
+
+        employee.validate()
+        if (employee.hasErrors()) {
+            def messageSource = new StaticMessageSource()
+
+            def errors = employee.errors.fieldErrors.collect{
+                [
+                     'message': messageSource.getMessage(it, null),
+                     'field': it.field,
+                     'badValue': it.rejectedValue
+                ]
+            }
+            return render(status: 400, contentType: "application/json") {
+                [
+                    message:'Failed to save',
+                    errors: errors,
+                    status: 'error'
+                ]
+            }
+        }
+        employee.save()
+
+        def employeeRole = new EmployeeRole(employee: employee, role: Role.findByAuthority('ROLE_EMPLOYEE'))
+        employeeRole.save(flush: true, insert: true, failOnError: true)
+
+        def message = "Employee " + employee.name +" registered with success in the establishment " + establishment.name
+        JSON.use("empSave") {
+            render(status: 201, contentType: 'application/json') {[
+                employee: employee,
+                message : message,
+                status  : 'ok'
             ]}
         }
     }
