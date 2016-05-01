@@ -1,21 +1,26 @@
 package com.herokuapp.rangout
 
+import grails.plugins.jsonapis.JsonApi
 import groovy.transform.EqualsAndHashCode
 
 @EqualsAndHashCode(includes = ['name', 'category'])
 class Item {
 
+    @JsonApi(['estSave', 'ordList'])
     String name
+    @JsonApi(['estSave'])
     String description
+    @JsonApi(['estSave', 'ordList'])
     String category
+    @JsonApi(['estSave', 'ordList'])
     Double price
 
     boolean available = true
+    @JsonApi(['estSave', 'ordList'])
     Set<String> ingredients = new HashSet<>()
 
     static hasMany   = [ingredients: String]
     static belongsTo = [establishment: Establishment]
-
 
     static constraints = {
         name        nullable: false, blank: false

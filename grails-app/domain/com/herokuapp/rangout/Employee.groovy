@@ -1,10 +1,12 @@
 package com.herokuapp.rangout
 
-import grails.rest.*
+import grails.plugins.jsonapis.JsonApi
+import grails.rest.Resource
 
-@Resource(uri='/employees', readOnly=false, formats=['json'])
+@Resource(uri='/employee', readOnly=false, formats=['json'])
 class Employee {
 
+    @JsonApi(['estSave'])
     String name
     String username
     String password

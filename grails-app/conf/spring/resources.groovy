@@ -1,5 +1,6 @@
+import com.herokuapp.rangout.Address
 import com.herokuapp.rangout.Employee
-import com.herokuapp.rangout.Establishment
+import com.herokuapp.rangout.CustomUserDetailsService
 import grails.rest.render.json.JsonRenderer
 
 import grails.plugin.springsecurity.SpringSecurityUtils
@@ -16,15 +17,11 @@ beans = {
         namedConfiguration = 'employeeSave'
     }
 
-    establishmentSaveRenderer(JsonRenderer, Establishment) {
-        namedConfiguration = 'establishmentList'
+    addressRenderer(JsonRenderer, Address) {
+        excludes = ['class', 'errors', 'id', 'version']
     }
 
-    establishmentSaveRenderer(JsonRenderer, Establishment) {
-        namedConfiguration = 'establishmentSave'
-    }
-
-    userDetailsService(com.herokuapp.rangout.CustomUserDetailsService) {
+    userDetailsService(CustomUserDetailsService) {
         grailsApplication = ref('grailsApplication')
     }
 }

@@ -2,16 +2,13 @@ package com.herokuapp.rangout
 
 import grails.converters.JSON
 import grails.plugin.springsecurity.annotation.Secured
-import grails.rest.RestfulController
 import grails.transaction.Transactional
-import groovy.json.JsonParserType
-import groovy.json.JsonSlurper
 
 @Transactional(readOnly = true)
 @Secured(['isFullyAuthenticated()'])
 class ApplicationController {
 
-    static allowedMethods = [index: "GET", signup: "POST"]
+    static allowedMethods = [index: "GET", register: "POST"]
 
     def grailsApplication
 
@@ -30,7 +27,7 @@ class ApplicationController {
     }
 
     @Secured(["permitAll"])
-    def signup() {
+    def register() {
         def object = request.JSON
         def establishment = new Establishment(object['establishment'])
 
@@ -113,7 +110,7 @@ class ApplicationController {
         employeeRole.save(flush: true, insert: true, failOnError: true)
 
         response.status = 201
-        JSON.use('establishmentSave') {
+        JSON.use('estSave') {
             render(contentType: 'application/json') {[
                     establishment: establishment,
                     status: 'ok',
