@@ -1,6 +1,9 @@
 import com.herokuapp.rangout.Address
+import com.herokuapp.rangout.CustomAccessTokenJsonRenderer
+import com.herokuapp.rangout.CustomAuthenticationProvider
+import com.herokuapp.rangout.JsonPayloadCredentialsExtractorService
 import com.herokuapp.rangout.Employee
-import com.herokuapp.rangout.CustomUserDetailsService
+import com.herokuapp.rangout.UserDetailsService
 import grails.rest.render.json.JsonRenderer
 
 import grails.plugin.springsecurity.SpringSecurityUtils
@@ -17,7 +20,16 @@ beans = {
         excludes = ['class', 'errors', 'id', 'version']
     }
 
-    userDetailsService(CustomUserDetailsService) {
+    credentialsExtractor(JsonPayloadCredentialsExtractorService)
+
+    accessTokenJsonRenderer(CustomAccessTokenJsonRenderer)
+
+    userDetailsService(UserDetailsService) {
         grailsApplication = ref('grailsApplication')
+    }
+
+    customAuthenticationProvider(CustomAuthenticationProvider) {
+        securityService   = ref('securityService')
+        customUserDetails = ref('userDetailsService')
     }
 }
