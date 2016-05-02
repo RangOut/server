@@ -21,7 +21,8 @@ class UrlMappings {
         "/api/establishment/$establishmentId/employee/$employeeId" (controller: "employee", action: "update", method: "PUT")
         "/api/establishment/$establishmentId/employee/$employeeId" (controller: "employee", action: "delete", method: "DELETE")
 
-        "/"(view:"/index")
-        "500"(view:'/error')
+        "/"   (view:"/index")
+        "403" (controller: "error", action: "forbidden")
+        "500" (view:'/error')
 	}
 }

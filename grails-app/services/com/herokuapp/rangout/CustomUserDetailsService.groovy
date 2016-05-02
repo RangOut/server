@@ -1,6 +1,5 @@
 package com.herokuapp.rangout
 
-import grails.plugin.springsecurity.SpringSecurityUtils
 import grails.plugin.springsecurity.userdetails.GormUserDetailsService
 import grails.transaction.Transactional
 import org.springframework.security.core.authority.GrantedAuthorityImpl
@@ -9,10 +8,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException
 
 @Transactional
 class CustomUserDetailsService extends GormUserDetailsService {
-
-    UserDetails loadUserByUsername(String username, boolean loadRoles) throws UsernameNotFoundException {
-        return loadUserByUsername(username)
-    }
 
     UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
@@ -34,5 +29,9 @@ class CustomUserDetailsService extends GormUserDetailsService {
             return new CustomUserDetails(employee.username, employee.password, employee.id, enabled,
                     accountExpired, accountLocked, passwordExpired, authorities)
         }
+    }
+
+    UserDetails loadUserByUsernameAndEstablishment(String username, String establishment) throws UsernameNotFoundException {
+
     }
 }

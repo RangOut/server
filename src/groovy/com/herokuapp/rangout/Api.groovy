@@ -114,11 +114,10 @@ class Api {
     static ok(controller, data=null) {
         def message = nothing
 
-        controller.response.status = 200
         if(data != null)
             message = data as JSON
 
-        controller.render(contentType: 'application/json') { message }
+        controller.render(status: 200, contentType: 'application/json') { message }
     }
 
     static error(controller, code=null, data=null) {
@@ -129,7 +128,6 @@ class Api {
         if(data != null)
             message = data as JSON
 
-        controller.response.status = code
-        controller.render(contentType: 'application/json') { message }
+        controller.render(status: code, contentType: 'application/json') { message }
     }
 }

@@ -23,9 +23,8 @@ class EmployeeController {
             ]
             return Api.error(this, 404, statusResponse)
         }
-        response.status = 200
         JSON.use('empList') {
-            render(contentType: 'application/json') {[
+            render(status: 200, contentType: 'application/json') {[
                     employees: establishment.employees,
                     manager  : establishment.manager,
                     status: 'ok'

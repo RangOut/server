@@ -139,7 +139,7 @@ grails.plugin.springsecurity.rememberMe.persistent = true
 grails.plugin.springsecurity.userLookup.userDomainClassName = 'com.herokuapp.rangout.Employee'
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'com.herokuapp.rangout.EmployeeRole'
 grails.plugin.springsecurity.authority.className = 'com.herokuapp.rangout.Role'
-grails.plugin.springsecurity.securityConfigType = 'InterceptUrlMap'
+grails.plugin.springsecurity.securityConfigType  = 'Annotation'
 grails.plugin.springsecurity.controllerAnnotations.staticRules = [
         '/':                              ['permitAll'],
         '/index':                         ['permitAll'],
@@ -148,21 +148,14 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
         '/**/css/**':                     ['permitAll'],
         '/**/images/**':                  ['permitAll'],
         '/**/fonts/**':                   ['permitAll'],
-        '/**/favicon.ico':                ['permitAll']]
-grails.plugin.springsecurity.interceptUrlMap = [
-        '/':                              ['permitAll'],
-        '/**/js/**':                      ['permitAll'],
-        '/**/css/**':                     ['permitAll'],
-        '/**/images/**':                  ['permitAll'],
-        '/**/fonts/**':                   ['permitAll'],
         '/**/favicon.ico':                ['permitAll'],
         '/api/register':                  ['permitAll'],
-        '/api/login':                     ['permitAll'],
+        '/api/login/':                    ['permitAll'],
         '/api/validate':                  ['permitAll'],
         '/api/status':                    ['permitAll'],
-        '/api/establishment':             ['permitAll'],
         '/dbconsole*/**':                 ['permitAll'],
-        '/api/**':				          ['isFullyAuthenticated()']]
+        '/login/auth':                    ['denyAll'],
+        '/api/**':                        ['isFullyAuthenticated()']]
 
 // Pessimistic lock-down: reject all urls with no security definition
 // Lock everything down by default, return 403

@@ -12,9 +12,8 @@ class EstablishmentController {
 
     @Secured(["permitAll"])
     def list() {
-        response.status = 200
         JSON.use('estList') {
-            render(contentType: 'application/json') {[
+            render(status: 200, contentType: 'application/json') {[
                     establishments: Establishment.listOrderByName(),
                     status: 'ok'
             ]}
@@ -32,9 +31,8 @@ class EstablishmentController {
             ]
             return Api.error(this, 404, statusResponse)
         }
-        response.status = 200
         JSON.use('ordList') {
-            render(contentType: 'application/json') {[
+            render(status: 200, contentType: 'application/json') {[
                     orders: Order.findAllByEstablishmentAndClosed(establishment, false),
                     status: 'ok'
             ]}
@@ -52,9 +50,8 @@ class EstablishmentController {
             ]
             return Api.error(this, 404, statusResponse)
         }
-        response.status = 200
         JSON.use('menList') {
-            render(contentType: 'application/json') {[
+            render(status: 200, contentType: 'application/json') {[
                     menu: establishment.menu,
                     status: 'ok'
             ]}

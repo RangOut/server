@@ -14,7 +14,7 @@ class RemoveStaleTokensJob {
         def results = c {
             or {
                 def fourteenDays = use(TimeCategory) {
-                    new Date() - 14.hours
+                    new Date() - 1.hour
                 }
                 eq('expired', true)
                 lt('refreshed', fourteenDays)
