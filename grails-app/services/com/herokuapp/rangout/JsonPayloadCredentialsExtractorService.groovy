@@ -15,7 +15,7 @@ class JsonPayloadCredentialsExtractorService extends AbstractJsonPayloadCredenti
         if (jsonBody) {
             String username = jsonBody."${'username'}"
             String password = jsonBody."${'password'}"
-            String establishment = jsonBody."${'password'}"
+            String establishment = jsonBody."${'establishment'}"
 
             log.debug "Extracted credentials from JSON payload. Username: ${username}, password: ${password?.size()?'[PROTECTED]':'[MISSING]'}"
 

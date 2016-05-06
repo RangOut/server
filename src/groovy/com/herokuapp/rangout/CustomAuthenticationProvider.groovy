@@ -8,6 +8,7 @@ import org.springframework.security.core.AuthenticationException
 
 class CustomAuthenticationProvider implements AuthenticationProvider {
 
+    def springSecurityService
     SecurityService securityService
     UserDetailsService customUserDetails
 
@@ -24,7 +25,7 @@ class CustomAuthenticationProvider implements AuthenticationProvider {
         else
             userDetails = customUserDetails.loadUserByUsernameAndEstablishment(username, establishment)
 
-        if (!securityService.encodePassword(password).equals(userDetails.password))
+        if (!securityService.isPasswordValid(password, userDetails.password))
             throw new BadCredentialsException("Wrong password.", password);
 
         def authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities())

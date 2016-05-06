@@ -157,6 +157,8 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
         '/login/auth':                    ['denyAll'],
         '/api/**':                        ['isFullyAuthenticated()']]
 
+grails.plugin.springsecurity.password.algorithm = 'bcrypt'
+
 // Pessimistic lock-down: reject all urls with no security definition
 // Lock everything down by default, return 403
 grails.plugin.springsecurity.rejectIfNoRule=true
@@ -223,9 +225,8 @@ grails.plugin.springsecurity.filterChain.chainMap = [
         '/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restExceptionTranslationFilter'                                                                          // Traditional chain
 ]
 
+
+// Examples of providers: 'daoAuthenticationProvider','anonymousAuthenticationProvider','rememberMeAuthenticationProvider'
 grails.plugin.springsecurity.providerNames = [
-        'customAuthenticationProvider',
-        'daoAuthenticationProvider',
-        'anonymousAuthenticationProvider',
-        'rememberMeAuthenticationProvider'
+        'customAuthenticationProvider'
 ]

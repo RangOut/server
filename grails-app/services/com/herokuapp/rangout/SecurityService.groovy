@@ -30,4 +30,8 @@ class SecurityService {
         log.debug("Encoded password is: " + password)
         encodedPassword
     }
+
+    def isPasswordValid(String password, String hashed) {
+        return springSecurityService.passwordEncoder.isPasswordValid(hashed, password, null)
+    }
 }
