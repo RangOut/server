@@ -12,8 +12,9 @@ class User {
     byte[] picture
 
     Set<Order> orders = new HashSet<>()
+    Set<UserTable> tables = new HashSet<>()
 
-    static hasMany = [orders: Order]
+    static hasMany  = [orders: Order, tables: UserTable]
 
     static constraints = {
         name nullable: false, blank: false
@@ -22,7 +23,7 @@ class User {
         email    nullable: true,  unique: true, email: true
         picture  nullable: true
 
-        orders nullable: true
+        tables nullable: true
     }
 
     static mapping = {
