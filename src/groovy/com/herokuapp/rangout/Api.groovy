@@ -42,9 +42,8 @@ class Api {
         controller.render(contentType: 'application/json') { new ApiResponse('Unexpected Error: ' + exception?.message) }
     }
 
-    static resourceUsed(controller, message='') {
-        controller.response.status = 400
-        controller.render(contentType: 'application/json') {
+    static resourceUsed(controller, code=400, message='') {
+        controller.render(status: code, contentType: 'application/json') {
             new ApiResponse(message, 2001)
         }
     }
@@ -106,15 +105,10 @@ class Api {
         controller.render(contentType: 'application/json') { new ApiResponse('Invalid UserService Id', 4000) }
     }
 
-    static badRequest(controller) {
-        controller.response.status = 400
-        controller.render(contentType: 'application/json') { nothing }
-    }
-
     static ok(controller, data=null) {
         def message = nothing
 
-        if(data != null)
+        if (data != null)
             message = data as JSON
 
         controller.render(status: 200, contentType: 'application/json') { message }
@@ -123,9 +117,9 @@ class Api {
     static error(controller, code=null, data=null) {
         def message = nothing
 
-        if(code == null)
+        if (code == null)
             code = 500
-        if(data != null)
+        if (data != null)
             message = data as JSON
 
         controller.render(status: code, contentType: 'application/json') { message }

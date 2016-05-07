@@ -27,9 +27,9 @@ class Employee {
     }
 
     static mapping = {
-        tablePerHierarchy false
         table 'employee'
         version false
+        tablePerHierarchy false
         username column: 'username'
         password column: 'password'
         establishment column: 'est_id'

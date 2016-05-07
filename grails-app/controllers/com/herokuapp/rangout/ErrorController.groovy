@@ -6,10 +6,41 @@ import grails.plugin.springsecurity.annotation.Secured
 class ErrorController {
 
     def forbidden() {
+        def message = params?.message
+        if (message == null) {
+            message = 'Access to the specified resource has been forbidden.'
+        }
+
         def statusResponse = [
-                message: 'Access to the specified resource has been forbidden',
+                message: message,
                 status : 'error'
         ]
         return Api.error(this, 403, statusResponse)
+    }
+
+    def notFound() {
+        def message = params?.message
+        if (message == null) {
+
+        }
+
+        def statusResponse = [
+                message: message,
+                status : 'error'
+        ]
+        return Api.error(this, 404, statusResponse)
+    }
+
+    def badRequest() {
+        def message = params?.message
+        if (message == null) {
+
+        }
+
+        def statusResponse = [
+                message: message,
+                status : 'error'
+        ]
+        return Api.error(this, 400, statusResponse)
     }
 }

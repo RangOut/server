@@ -7,15 +7,15 @@ class Order {
     @JsonApi(['ordList'])
     Double total = 0
     @JsonApi(['ordList'])
-    Establishment establishment
+    Table table
 
     @JsonApi(['ordList'])
     boolean closed = false
     @JsonApi(['ordList'])
     Set<OrderItem> items = new HashSet<>()
 
+    static hasOne  = [table: Table]
     static hasMany = [items: OrderItem]
-    static hasOne  = [establishment: Establishment]
 
     static belongsTo = [user: User]
 
@@ -23,7 +23,7 @@ class Order {
         total nullable: false, blank: false, validator: {value -> return value > 0}
         items validator: {value -> return !value.isEmpty()}
 
-        establishment nullable: false, blank: false
+        table nullable: false, blank: false
     }
 
     static mapping = {
@@ -31,7 +31,7 @@ class Order {
         version false
         total column: 'total'
         closed column: 'closed'
-        establishment column: 'est_id'
+        table column: 'tab_id'
     }
 
     def beforeValidate() {

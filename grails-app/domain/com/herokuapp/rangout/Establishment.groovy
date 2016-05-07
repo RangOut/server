@@ -9,7 +9,7 @@ import groovy.transform.EqualsAndHashCode
 @Resource(uri='api/establishment', readOnly=false, formats=['json'])
 class Establishment {
 
-    @JsonApi(['estSave', 'estList'])
+    @JsonApi(['estSave', 'estList', 'selTable'])
     String name
     @JsonApi(['estSave'])
     String cnpj
@@ -22,8 +22,8 @@ class Establishment {
 
     @JsonApi(['estSave', 'menList'])
     Set<Item> menu = new HashSet<>()
-
-    Set<Order> orders = new HashSet<>()
+    @JsonApi(['estSave', 'estList'])
+    Set<Table> tables = new HashSet<>()
     @JsonApi(['empList'])
     Set<Employee> employees = new HashSet<>()
 
@@ -32,7 +32,7 @@ class Establishment {
     @JsonApi(['estSave'])
     Set<String> cellphones = new HashSet<>()
 
-    static hasMany  = [employees: Employee, menu: Item, orders: Order, telephones: String, cellphones: String]
+    static hasMany  = [employees: Employee, menu: Item, tables: Table, telephones: String, cellphones: String]
     static embedded = ['address']
 
     static constraints = {
@@ -50,8 +50,8 @@ class Establishment {
                     errors.reject('address', 'unique')
             }
         }
-        menu   nullable: false, black: false, validator: { value -> return !value.isEmpty() }
-        orders nullable: true
+        menu   nullable: false, blank: false, validator: { value -> return !value.isEmpty() }
+        tables nullable: false, blank: false, validator: { value -> return !value.isEmpty() }
     }
 
     static mapping = {
@@ -73,6 +73,14 @@ class Establishment {
                 column: 'cellphone',
                 type: 'text'
         ], cascade: 'all-delete-orphan'
+    }
+
+    boolean hasFreeTable() {
+        return tables.any{ t -> t.isFree }
+    }
+
+    Table getAFreeTable() {
+        return tables.find{ t -> t.isFree }
     }
 }
 

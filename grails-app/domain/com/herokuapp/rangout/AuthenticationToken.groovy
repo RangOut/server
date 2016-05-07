@@ -14,6 +14,7 @@ class AuthenticationToken {
     }
 
     static mapping = {
+        table 'token'
         version false
     }
 
