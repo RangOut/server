@@ -1,16 +1,23 @@
 package com.herokuapp.rangout
 
+import grails.plugins.jsonapis.JsonApi
 import grails.rest.Resource
 
 @Resource(uri='/api/user', readOnly=false, formats=['json'])
 class User {
 
+    @JsonApi(['usrSave'])
     String name
+    @JsonApi(['usrSave'])
     String socialId
+    @JsonApi(['usrSave'])
     String username
+    @JsonApi(['usrSave'])
     String email
+    @JsonApi(['usrSave'])
     byte[] picture
 
+    User currentTable
     Set<Order> orders = new HashSet<>()
     Set<UserTable> tables = new HashSet<>()
 
@@ -24,6 +31,8 @@ class User {
         picture  nullable: true
 
         tables nullable: true
+        orders nullable: true
+        currentTable nullable: true
     }
 
     static mapping = {
@@ -34,5 +43,11 @@ class User {
         username column: 'username'
         email column: 'email'
         picture column: 'picture'
+    }
+
+    def afterUpdate() {
+        if (isDirty('currentTable') && currentTable != null) {
+            tables.add(new UserTable(user: this, table: currentTable))
+        }
     }
 }

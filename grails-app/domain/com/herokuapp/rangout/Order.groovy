@@ -7,8 +7,6 @@ class Order {
     @JsonApi(['ordList'])
     Double total = 0
     @JsonApi(['ordList'])
-    boolean closed = false
-    @JsonApi(['ordList'])
     Set<OrderItem> items = new HashSet<>()
 
     static hasOne  = [table: UserTable]
@@ -27,7 +25,6 @@ class Order {
         table 'ordered'
         version false
         total column: 'total'
-        closed column: 'closed'
     }
 
     def beforeValidate() {

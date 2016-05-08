@@ -15,14 +15,15 @@ class Establishment {
     String cnpj
     @JsonApi(['estSave'])
     String nickname
+    @JsonApi(['estSave'])
+    int numTables
     @JsonApi(['estSave', 'estList'])
     Address address
     @JsonApi(['estSave', 'empList'])
     Manager manager
-
     @JsonApi(['estSave', 'menList'])
     Set<Item> menu = new HashSet<>()
-    @JsonApi(['estSave', 'estList'])
+    @JsonApi(['estList'])
     Set<Table> tables = new HashSet<>()
     @JsonApi(['empList'])
     Set<Employee> employees = new HashSet<>()
@@ -43,6 +44,7 @@ class Establishment {
         nickname   nullable: false, blank: false, unique: true
         telephones nullable: false, blank: false, validator: { value -> return !value.isEmpty() }
         cellphones nullable: true
+        numTables  nullable: false, blank: false, validator: { value -> return value > 0 }
 
         address nullable: false, blank:false, validator: { value, object, errors ->
             object.list()?.each { objEst ->
@@ -61,6 +63,7 @@ class Establishment {
         nickname column: 'nickname'
         cnpj column: "cnpj"
         manager column: 'manager_id'
+        numTables column: 'num_tables'
         telephones joinTable: [
                 name: 'tel_establishment',
                 key: 'est_id',
@@ -73,6 +76,12 @@ class Establishment {
                 column: 'cellphone',
                 type: 'text'
         ], cascade: 'all-delete-orphan'
+    }
+
+    def beforeValidate() {
+        for (int i = 1; i <= numTables; i++) {
+            tables.add(new Table(number: i))
+        }
     }
 
     boolean hasFreeTable() {

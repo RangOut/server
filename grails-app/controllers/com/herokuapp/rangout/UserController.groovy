@@ -13,7 +13,23 @@ class UserController {
 
     @Secured(["permitAll"])
     def register() {
+        def object = request.JSON
+        def user = new User(object['user'])
 
+        user.validate()
+        if (user.hasErrors()) {
+            def errors = user.errors
+        }
+
+        user.save(failOnError: true)
+        def message = "Establishment " + user.name + " registered with success under socialId: " + user.socialId
+        JSON.use('usrSave') {
+            render(status: 200, contentType: 'application/json') {[
+                    user: user,
+                    message: message,
+                    status: 'ok'
+            ]}
+        }
     }
 
     @Secured(["permitAll"])
@@ -48,12 +64,14 @@ class UserController {
         }
 
         if (establishment.hasFreeTable()) {
-            user.table = establishment.getAFreeTable()
+            def table = establishment.getAFreeTable()
+
+            user.currentTable = table
             user.save(failOnError: true)
 
             JSON.use('selTable') {
                 render(status: 200, contentType: 'application/json') {[
-                        table: user.table,
+                        table: table,
                         status: 'ok'
                 ]}
             }
@@ -69,13 +87,13 @@ class UserController {
             redirect(controller: 'error', action: 'notFound', params: [message: 'User NOT FOUND'])
         }
 
-        if (user.table == null) {
+        if (user.currentTable == null) {
             redirect(controller: 'error', action: 'badRequest', params: [message: 'Unsupported operation, first select a table of an establishment.'])
         }
 
         JSON.use('ordList') {
             render(status: 200, contentType: 'application/json') {[
-                    orders: Order.findAllByUserAndTableAndClosed(user, user.table, false),
+                    orders: Order.findByTable(UserTable.findByUserAndTableAndClosed(user, user.currentTable, false)),
                     status: 'ok'
             ]}
         }
@@ -92,13 +110,13 @@ class UserController {
             redirect(controller: 'error', action: 'notFound', params: [message: 'User NOT FOUND'])
         }
 
-        if (user.table == null) {
+        if (user.currentTable == null) {
             redirect(controller: 'error', action: 'badRequest', params: [message: 'Unsupported operation, first select a table of an establishment.'])
         }
 
         JSON.use('makOrder') {
             render(status: 200, contentType: 'application/json') {[
-                    orders: Order.findAllByUserAndTableAndClosed(user, user.table, false),
+                    orders: Order.findByTable(UserTable.findByUserAndTableAndClosed(user, user.currentTable, false)),
                     status: 'ok'
             ]}
         }
