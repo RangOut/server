@@ -28,7 +28,7 @@ class UserController {
         def message = "User " + user.name + " registered with success under socialId: " + user.socialId
 
         JSON.use('usrSave') {
-            render(status: 200, contentType: 'application/json') {[
+            render(status: 201, contentType: 'application/json') {[
                     user: user,
                     message: message,
                     status: 'ok'
@@ -87,7 +87,7 @@ class UserController {
                 ]}
             }
         } else {
-            return Api.resourceUsed(this, 400, 'Establishment not has a free table, try again later.')
+            return Api.error(this, 400, 'Establishment not has a free table, try again later.')
         }
     }
 

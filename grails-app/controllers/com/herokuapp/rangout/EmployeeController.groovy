@@ -10,7 +10,7 @@ import org.springframework.context.support.StaticMessageSource
 @Secured(['isFullyAuthenticated()'])
 class EmployeeController {
 
-    static allowedMethods = [save: "POST", list: "GET", delete: "DELETE", update: "PUT", show: "GET"]
+    static allowedMethods = [save: "POST", list: "GET", delete: "DELETE"]
 
     @Secured(["ROLE_MANAGER"])
     def list() {
@@ -87,11 +87,8 @@ class EmployeeController {
         }
     }
 
-    def update() {
-
-    }
-
+    @Secured(["ROLE_MANAGER"])
     def delete() {
-
+        def establishment = Establishment.findById(params?.long('establishmentId', 0))
     }
 }

@@ -25,7 +25,7 @@ class EstablishmentController {
         def establishment = Establishment.findById(params?.long('establishmentId', 0))
 
         if (establishment == null) {
-            def statusResponse = [
+            def         statusResponse = [
                     message: 'Establishment NOT FOUND',
                     status : 'error'
             ]
@@ -46,7 +46,7 @@ class EstablishmentController {
         if (establishment == null) {
             def statusResponse = [
                     message: 'Establishment NOT FOUND',
-                    status : 'error'
+                           status : 'error'
             ]
             return Api.error(this, 404, statusResponse)
         }
