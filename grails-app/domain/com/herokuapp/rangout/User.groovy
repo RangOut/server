@@ -6,9 +6,9 @@ import grails.rest.Resource
 @Resource(uri='/api/user', readOnly=false, formats=['json'])
 class User {
 
-    @JsonApi(['usrSave'])
+    @JsonApi(['usrSave', 'ordList', 'selTable'])
     String name
-    @JsonApi(['usrSave'])
+    @JsonApi(['usrSave', 'ordList', 'selTable'])
     String socialId
     @JsonApi(['usrSave'])
     String username

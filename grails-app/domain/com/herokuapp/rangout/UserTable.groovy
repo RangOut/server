@@ -1,18 +1,13 @@
 package com.herokuapp.rangout
 
-class UserTable implements Serializable {
+class UserTable {
 
-    private static final long serialVersionUID = 1
-
-    double account = 0
     Set<Order> orders = new HashSet<>()
 
     static hasOne  = [user: User, table: Table]
     static hasMany = [orders: Order]
 
     static constraints = {
-        account nullable: false, table: false, validator: { value -> return value >= 0 }
-
         user  nullable: false, blank: false
         table nullable: false, blank: false
     }
@@ -20,5 +15,14 @@ class UserTable implements Serializable {
     static mapping = {
         table 'user_table'
         version false
+    }
+
+    def getAccount() {
+        def account = 0
+        orders?.each { order ->
+            account += order.closed ? 0 : order.total
+        }
+
+        return account
     }
 }

@@ -6,8 +6,8 @@ class Order {
 
     @JsonApi(['ordList'])
     Double total = 0
-    @JsonApi('ordList')
     boolean closed = false
+
     @JsonApi(['ordList'])
     Set<OrderItem> items = new HashSet<>()
 
@@ -17,10 +17,9 @@ class Order {
     static belongsTo = [user: User]
 
     static constraints = {
-        total nullable: false, blank: false, validator: {value -> return value > 0}
-        items nullable: false, blank: false, validator: {value -> return !value.isEmpty()}
-
+        total nullable: false, blank: false
         table nullable: false, blank: false
+        items nullable: false, blank: false, validator: { value -> !value.isEmpty() }
     }
 
     static mapping = {
@@ -30,9 +29,10 @@ class Order {
         closed column: 'closed'
     }
 
-    def beforeValidate() {
+    def beforeInsert() {
+        total = 0
         items.each { orderItem ->
-            total += orderItem.item.price
+            total += orderItem.item.price * orderItem.amount
         }
     }
 }

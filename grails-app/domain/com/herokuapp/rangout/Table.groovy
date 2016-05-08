@@ -4,9 +4,9 @@ import grails.plugins.jsonapis.JsonApi
 
 class Table {
 
-    @JsonApi(['selTable'])
+    @JsonApi(['ordList', 'selTable'])
     int number
-    @JsonApi(['selTable'])
+
     boolean isFree = true
     Set<UserTable> clients = new HashSet<>()
 
@@ -18,7 +18,6 @@ class Table {
         number nullable: false, blank: false
 
         clients nullable: true
-//        establisment  nullable: true
     }
 
     static mapping = {
