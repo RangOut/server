@@ -8,6 +8,8 @@ import grails.transaction.*
 @Secured(['isFullyAuthenticated()'])
 class EstablishmentController {
 
+    def springSecurityService
+
     static allowedMethods = [list: "GET", getOrders: "GET", getMenu: 'GET']
 
     @Secured(["permitAll"])
@@ -22,18 +24,20 @@ class EstablishmentController {
 
     @Secured(["ROLE_EMPLOYEE"])
     def getOrders() {
-        def establishment = Establishment.findById(params?.long('establishmentId', 0))
+        Employee employee = springSecurityService.currentUser
+//        def establishment = Establishment.findById(params?.long('establishmentId', 0))
+//
+//        if (establishment == null) {
+//            def         statusResponse = [
+//                    message: 'Establishment NOT FOUND',
+//                    status : 'error'
+//            ]
+//            return Api.error(this, 404, statusResponse)
+//        }
 
-        if (establishment == null) {
-            def         statusResponse = [
-                    message: 'Establishment NOT FOUND',
-                    status : 'error'
-            ]
-            return Api.error(this, 404, statusResponse)
-        }
         JSON.use('ordList') {
             render(status: 200, contentType: 'application/json') {[
-                    orders: Order.findAllByEstablishmentAndClosed(establishment, false),
+                    orders: [],
                     status: 'ok'
             ]}
         }
@@ -41,18 +45,19 @@ class EstablishmentController {
 
     @Secured(["ROLE_EMPLOYEE"])
     def getMenu() {
-        def establishment = Establishment.findById(params?.long('establishmentId', 0))
-
-        if (establishment == null) {
-            def statusResponse = [
-                    message: 'Establishment NOT FOUND',
-                           status : 'error'
-            ]
-            return Api.error(this, 404, statusResponse)
-        }
+        Employee employee = springSecurityService.currentUser
+//        def establishment = Establishment.findById(params?.long('establishmentId', 0))
+//
+//        if (establishment == null) {
+//            def statusResponse = [
+//                    message: 'Establishment NOT FOUND',
+//                           status : 'error'
+//            ]
+//            return Api.error(this, 404, statusResponse)
+//        }
         JSON.use('menList') {
             render(status: 200, contentType: 'application/json') {[
-                    menu: establishment.menu,
+                    menu: employee.establishment.menu,
                     status: 'ok'
             ]}
         }

@@ -8,7 +8,6 @@ import org.springframework.security.core.AuthenticationException
 
 class CustomAuthenticationProvider implements AuthenticationProvider {
 
-    def springSecurityService
     SecurityService securityService
     UserDetailsService customUserDetails
 
