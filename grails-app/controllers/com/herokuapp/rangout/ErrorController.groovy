@@ -10,7 +10,6 @@ class ErrorController {
         if (message == null) {
             message = 'Access to the specified resource has been forbidden.'
         }
-
         def statusResponse = [
                 message: message,
                 status : 'error'
@@ -23,7 +22,6 @@ class ErrorController {
         if (message == null) {
 
         }
-
         def statusResponse = [
                 message: message,
                 status : 'error'
@@ -36,11 +34,22 @@ class ErrorController {
         if (message == null) {
 
         }
-
         def statusResponse = [
                 message: message,
                 status : 'error'
         ]
         return Api.error(this, 400, statusResponse)
+    }
+
+    def methodNotAllowed() {
+        def message = params?.message
+        if (message == null) {
+            message = 'The specified HTTP method is not allowed for the requested resource.'
+        }
+        def statusResponse = [
+                message: message,
+                status : 'error'
+        ]
+        return Api.error(this, 405, statusResponse)
     }
 }

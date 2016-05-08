@@ -23,13 +23,14 @@ class UrlMappings {
 
         "/api/user/order"     (controller: "user", action: "makeOrder", parseRequest: true)
         "/api/user/register"  (controller: "user", action: "register", parseRequest: true)
-        "/api/user/$socialId" (controller: "user", action: "getOrders")
+        "/api/user/$socialId/order" (controller: "user", action: "getOrders")
         "/api/user/establishment/$establishmentId/menu"  (controller: "user", action: "getEstablishmentMenu")
         "/api/user/establishment/$establishmentId/table" (controller: "user", action: "selectTable", parseRequest: true)
 
 
         "/"   (view:"/index")
         "403" (controller: "error", action: "forbidden")
+        "405" (controller: "error", action: "methodNotAllowed")
         "500" (view:'/error')
 	}
 }

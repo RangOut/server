@@ -53,7 +53,6 @@ class Establishment {
             }
         }
         menu   nullable: false, blank: false, validator: { value -> return !value.isEmpty() }
-        tables nullable: false, blank: false, validator: { value -> return !value.isEmpty() }
     }
 
     static mapping = {
@@ -76,12 +75,6 @@ class Establishment {
                 column: 'cellphone',
                 type: 'text'
         ], cascade: 'all-delete-orphan'
-    }
-
-    def beforeValidate() {
-        for (int i = 1; i <= numTables; i++) {
-            tables.add(new Table(number: i))
-        }
     }
 
     boolean hasFreeTable() {

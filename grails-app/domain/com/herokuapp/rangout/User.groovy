@@ -17,11 +17,11 @@ class User {
     @JsonApi(['usrSave'])
     byte[] picture
 
-    User currentTable
     Set<Order> orders = new HashSet<>()
     Set<UserTable> tables = new HashSet<>()
 
-    static hasMany  = [orders: Order, tables: UserTable]
+    static hasOne  = [currentTable: UserTable]
+    static hasMany = [orders: Order, tables: UserTable]
 
     static constraints = {
         name nullable: false, blank: false
@@ -43,11 +43,5 @@ class User {
         username column: 'username'
         email column: 'email'
         picture column: 'picture'
-    }
-
-    def afterUpdate() {
-        if (isDirty('currentTable') && currentTable != null) {
-            tables.add(new UserTable(user: this, table: currentTable))
-        }
     }
 }

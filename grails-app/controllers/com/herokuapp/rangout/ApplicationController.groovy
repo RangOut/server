@@ -31,13 +31,6 @@ class ApplicationController {
         def object = request.JSON
         def establishment = new Establishment(object['establishment'])
 
-        establishment.menu?.each { item ->
-            item.establishment = establishment
-        }
-        establishment?.tables.each { table ->
-            table.establisment = establishment
-        }
-
         def menu = establishment.menu
         def manager = establishment.manager
 
@@ -105,6 +98,12 @@ class ApplicationController {
 //                return Api.Unexpected(this)
 //            }
 //        }
+        establishment.menu?.each { item ->
+            item.establishment = establishment
+        }
+        for(int i = 1; i <= establishment.numTables ; i++) {
+            establishment.tables.add(new Table(number: i, establisment: establishment))
+        }
         establishment.save(failOnError: true)
 
         def managerRole = new EmployeeRole(employee: manager, role: Role.findByAuthority('ROLE_MANAGER'))
