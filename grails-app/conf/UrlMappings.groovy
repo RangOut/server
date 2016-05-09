@@ -15,7 +15,7 @@ class UrlMappings {
         "/api/establishment/$establishmentId/employee" (controller: "employee", action: "save", method: "POST", parseRequest: true)
 
         "/api/establishment/$establishmentId/menu"  (controller: "establishment", action: "getMenu", method: "GET")
-        "/api/establishment/$establishmentId/order" (controller: "establishment", action: "getOrders", method: "GET")
+        "/api/establishment/order" (controller: "establishment", action: "getOrders", method: "GET")
         "/api/establishment/menu" (controller: "establishment", action: "addItemMenu", method: "POST", parseRequest: true)
         "/api/establishment/menu/$itemId" (controller: "establishment", action: "updateItemMenu", method: "PUT", parseRequest: true)
         "/api/establishment/employee/$employeeId" (controller: "employee", action: "delete", method: "DELETE")

@@ -27,9 +27,24 @@ class EstablishmentController {
     def getOrders() {
         Employee employee = springSecurityService.currentUser
 
+        def openOrders = []
+        def tables = employee.establishment.tables
+
+        tables.findAll { !it.isFree }?.each { table ->
+            UserTable.findAllByTable(table)?.each { userTable ->
+                userTable.orders.findAll { !it.closed }?.each { order ->
+                    openOrders.add([
+                        user   : order.user,
+                        table  : table,
+                        order  : order,
+                        account: userTable.getAccount()
+                    ])
+                }
+            }
+        }
         JSON.use('ordList') {
             render(status: 200, contentType: 'application/json') {[
-                    orders: [],
+                    openOrders: openOrders,
                     status: 'ok'
             ]}
         }
@@ -111,7 +126,7 @@ class EstablishmentController {
             item.setIngredients(ingredients)
 
         try {
-            item.save(failOnError: true)
+            item.save(failOnError: true, flush: true)
             JSON.use('menList') {
                 render(status: 202, contentType: 'application/json') {[
                         item: item,
