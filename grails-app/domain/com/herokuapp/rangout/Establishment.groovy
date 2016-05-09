@@ -52,7 +52,7 @@ class Establishment {
                     errors.reject('address', 'unique')
             }
         }
-        menu   nullable: false, blank: false, validator: { value -> return !value.isEmpty() }
+        menu nullable: false, blank: false, validator: { value -> return !value.isEmpty() }
     }
 
     static mapping = {
